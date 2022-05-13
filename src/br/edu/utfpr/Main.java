@@ -14,5 +14,7 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
 public class Main {
     public static void main(String[] args) {
 
+        System.out.println("Teste");
+
     }
 }
