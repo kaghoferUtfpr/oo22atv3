@@ -14,8 +14,13 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
 public class Main {
     public static void main(String[] args) {
 
-        Livro l1 = new Livro("Java Iniciantes", "Daniel Kaghofer");
-        System.out.println(l1.getTitulo());
+       Emprestimo emp = new Emprestimo();
 
+       Acervo acervo = new Acervo();
+       acervo.addLivroAcervo();
+       acervo.addLivroAcervo();
+
+
+       acervo.listarAcervo();
     }
 }
