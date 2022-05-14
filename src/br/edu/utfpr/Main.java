@@ -22,5 +22,6 @@ public class Main {
 
 
        acervo.listarAcervo();
+        System.out.println("Teste");
     }
 }
