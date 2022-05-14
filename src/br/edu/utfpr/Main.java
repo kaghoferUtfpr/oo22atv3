@@ -30,7 +30,5 @@ public class Main {
 
         Calendario c = new Calendario();
 
-        c.CompareTwoDatesTest("11/10/2022");
-
     }
 }
