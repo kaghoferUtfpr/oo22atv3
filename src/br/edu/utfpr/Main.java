@@ -11,17 +11,27 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
 - caso tenha vencido calcular 50 centavos ao dia até 20 reais, depois 1 real por dia
  */
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
 
-       Emprestimo emp = new Emprestimo();
+        LocalDate d1 = LocalDate.of(2022, 5, 1);
+        LocalDate d2 = LocalDate.of(2022, 5, 31);
 
-       Acervo acervo = new Acervo();
-       acervo.addLivroAcervo();
-       acervo.addLivroAcervo();
+        long days = ChronoUnit.DAYS.between(d1, d2);
+        System.out.println( days );
+
+        Calendario c = new Calendario();
+
+        c.CompareTwoDatesTest("11/10/2022");
 
 
-       acervo.listarAcervo();
-        System.out.println("Teste");
     }
 }
