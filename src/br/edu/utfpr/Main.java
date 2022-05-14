@@ -11,24 +11,32 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
 - caso tenha vencido calcular 50 centavos ao dia até 20 reais, depois 1 real por dia
  */
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Main {
     public static void main(String[] args) throws ParseException {
 
-        LocalDate d1 = LocalDate.of(2022, 5, 1);
-        LocalDate d2 = LocalDate.of(2022, 5, 31);
+        Livro l1 = new Livro( "Erik Brynjolfsson e Andrew Mcafee","A Segunda Era das Máquinas", 2, 1111);
+        Livro l2 = new Livro("Susan Cain", "O Poder dos Quietos", 2, 2222);
+        Livro l3 = new Livro("Paul Barry e David Griffiths", "Use a cabeça! Programação", 2, 3333);
+        Livro l4 = new Livro("Klaus Schwab", "A Quarta Revolução Industrial", 2, 4444);
+        Livro l5 = new Livro("Ernesto Mario Haberkorn", "Um Bate-papo sobre T.I", 2, 5555);
 
-        long days = ChronoUnit.DAYS.between(d1, d2);
-        System.out.println( days );
+        Acervo acervo = new Acervo();
+        acervo.addListaInicial(l1);
+        acervo.addListaInicial(l2);
+        acervo.addListaInicial(l3);
+        acervo.addListaInicial(l4);
+        acervo.addListaInicial(l5);
 
-        Calendario c = new Calendario();
+        //acervo.addLivroAcervo();
+        //acervo.listarAcervo();
+
+        Alugueis al = new Alugueis();
+
+
+        al.listarEmprestimos();
+
 
     }
 }
