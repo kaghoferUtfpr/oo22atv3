@@ -2,16 +2,19 @@ package br.edu.utfpr;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Emprestimo {
 
-    private Livro livro;
+    private List<Livro> listaLivros = new ArrayList<>();
     private Datas dataLocacao;
     private Datas dataDevolucao;
     private Status status;
 
     public Emprestimo(Livro livro, Datas dataLocacao, Datas dataDevolucao, Status status) {
-        this.livro = livro;
+        Livro l = new Livro();
+        l = livro;
         this.dataLocacao = dataLocacao;
         this.dataDevolucao = dataDevolucao;
         this.status = status;
@@ -19,15 +22,6 @@ public class Emprestimo {
 
     public Emprestimo() {
     }
-
-    public Livro getLivro() {
-        return livro;
-    }
-
-    public void setLivro(Livro livro) {
-        this.livro = livro;
-    }
-
     public void getDataLocacao() {
     }
 
