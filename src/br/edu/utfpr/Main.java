@@ -33,8 +33,9 @@ public class Main {
         acervo.addListaInicial(lista, l4);
         acervo.addListaInicial(lista, l5);
 
-        //acervo.addLivroAcervo();
-        acervo.listarAcervo(lista);
+        //acervo.addLivroAcervo(lista);
+        //acervo.listarAcervo(lista);
 
+        Emprestimo emp = new Emprestimo();
     }
 }

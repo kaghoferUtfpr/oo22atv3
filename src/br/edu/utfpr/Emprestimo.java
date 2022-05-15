@@ -7,48 +7,12 @@ import java.util.List;
 
 public class Emprestimo {
 
-    private List<Livro> listaLivros = new ArrayList<>();
+    private int codigo;
+    private Livro livro;
     private Datas dataLocacao;
     private Datas dataDevolucao;
     private Status status;
 
-    public Emprestimo(Livro livro, Datas dataLocacao, Datas dataDevolucao, Status status) {
-        Livro l = new Livro();
-        l = livro;
-        this.dataLocacao = dataLocacao;
-        this.dataDevolucao = dataDevolucao;
-        this.status = status;
-    }
-
-    public Emprestimo() {
-    }
-    public void getDataLocacao() {
-    }
-
-    public void setDataLocacao(Datas dataLocacao) {
-        this.dataLocacao = dataLocacao;
-    }
-
-    public Datas getDataDevolucao() {
-        return dataDevolucao;
-    }
-
-    public void setDataDevolucao(Datas dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public LocalDate diaHoje() {
-        LocalDate lc = LocalDate.now();
-        return lc;
-    }
 
 
     public long validarEntrega(Datas data){

@@ -11,7 +11,7 @@ public class Acervo {
         livros.forEach(l -> System.out.printf("Autor: %s" + "\t" + "Livro: %s\n",l.getAutor(), l.getTitulo()));
     }
 
-    public List<Livro> addLivroAcervo(List<Livro> lista)
+    public void addLivroAcervo(List<Livro> lista)
     {
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o nome do autor: ");
@@ -24,13 +24,11 @@ public class Acervo {
         int cod = sc.nextInt();
         Livro l = new Livro(autor,titulo,qtdDisp, cod);
         lista.add(l);
-        return lista;
     }
 
-    public List<Livro> addListaInicial(List<Livro> livros,Livro l)
+    public void addListaInicial(List<Livro> livros,Livro l)
     {
         livros.add(l);
-        return livros;
     }
 
 }
