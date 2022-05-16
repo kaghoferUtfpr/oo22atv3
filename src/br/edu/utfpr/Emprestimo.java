@@ -28,7 +28,6 @@ public class Emprestimo {
             System.out.println(lista.get(i).dataDevolucao.getDia());
             System.out.println(lista.get(i).dataLocacao.getDia());
             System.out.println(lista.get(i).livro.getAutor());
-
         }
     }
 

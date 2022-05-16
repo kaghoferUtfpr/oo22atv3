@@ -19,11 +19,18 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws ParseException {
 
-        Livro l1 = new Livro("Erik Brynjolfsson e Andrew Mcafee", "A Segunda Era das Máquinas", 2, 1111);
-        Livro l2 = new Livro("Susan Cain", "O Poder dos Quietos", 2, 2222);
-        Livro l3 = new Livro("Paul Barry e David Griffiths", "Use a cabeça! Programação", 2, 3333);
-        Livro l4 = new Livro("Klaus Schwab", "A Quarta Revolução Industrial", 2, 4444);
-        Livro l5 = new Livro("Ernesto Mario Haberkorn", "Um Bate-papo sobre T.I", 2, 5555);
+        int codLivro = 1;
+
+        Livro l1 = new Livro("Erik Brynjolfsson e Andrew Mcafee", "A Segunda Era das Máquinas", 2, codLivro);
+        codLivro++;
+        Livro l2 = new Livro("Susan Cain", "O Poder dos Quietos", 2, codLivro);
+        codLivro++;
+        Livro l3 = new Livro("Paul Barry e David Griffiths", "Use a cabeça! Programação", 2, codLivro);
+        codLivro++;
+        Livro l4 = new Livro("Klaus Schwab", "A Quarta Revolução Industrial", 2, codLivro);
+        codLivro++;
+        Livro l5 = new Livro("Ernesto Mario Haberkorn", "Um Bate-papo sobre T.I", 2, codLivro);
+        codLivro++;
 
         List<Livro> listaLivros = new ArrayList<>();
 
@@ -34,24 +41,12 @@ public class Main {
         acervo.addListaInicial(listaLivros, l4);
         acervo.addListaInicial(listaLivros, l5);
 
-        //acervo.addLivroAcervo(lista);
-        //acervo.listarAcervo(lista);
-
         List<Emprestimo> listaEmprestimos = new ArrayList<>();
 
-        int cod = 1;
-        Datas d1 = new Datas(01, 05, 2022);
-        Datas d2 = new Datas(10, 05, 2022);
-
-        Emprestimo e = new Emprestimo(cod, listaLivros.get(1), d1, d2);
-
-        acervo.encontrarPorCod(1111, listaLivros);
-        acervo.removerLivro(1111, listaLivros);
-        acervo.encontrarPorCod(1111, listaLivros);
 
         int opcao;
         do {
-            System.out.println("Insira uma opção: ");
+
             System.out.println("1 - Cadastrar Livro");
             System.out.println("2 - Deletar Livro");
             System.out.println("3 - Reservar Livro");
@@ -59,18 +54,19 @@ public class Main {
             System.out.println("5 - Devolver Livro");
             System.out.println("6 - Listar Acervo");
             System.out.println("7 - Listar Empréstimos");
+            System.out.println("0 - SAIR");
+            System.out.println("Insira uma opção: ");
             Scanner sc = new Scanner(System.in);
             opcao = sc.nextInt();
-
             switch (opcao) {
                 case 1:
                     System.out.println("1=Cadastro de Livro: ");
-                    acervo.addLivroAcervo(listaLivros);
+                    acervo.addLivroAcervo(listaLivros, codLivro);
+                    codLivro++;
                     break;
                 case 2:
                     System.out.println("2=Deletar Livro: ");
                     System.out.println("Insira o Código: ");
-
                     acervo.removerLivro(sc.nextInt(),listaLivros);
                     break;
                 case 3:
@@ -81,17 +77,19 @@ public class Main {
                     break;
                 case 5:
                     System.out.println("Listar Acervo: ");
-                    acervo.listarAcervo(listaLivros);
+
                     break;
                 case 6:
-                    System.out.println("Listar Empréstimos de Livros: ");
-                    Emprestimo.imprimirListaEmprestimos(listaEmprestimos);
+                    System.out.println("Listar Acervo de Livros: ");
+                    acervo.listarAcervo(listaLivros);
                     break;
+                case 7:
+                    System.out.println("Listar Emprestimos: ");
+                    Emprestimo.imprimirListaEmprestimos(listaEmprestimos);
                 default:
                     System.out.println("Opção Inválida");
+                    break;
             }
-
-
         } while (opcao != 0);
 
 //        Emprestimo.imprimirListaEmprestimos(listaEmprestimos);
