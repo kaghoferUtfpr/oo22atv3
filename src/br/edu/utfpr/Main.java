@@ -12,6 +12,8 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
  */
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws ParseException {
@@ -22,21 +24,18 @@ public class Main {
         Livro l4 = new Livro("Klaus Schwab", "A Quarta Revolução Industrial", 2, 4444);
         Livro l5 = new Livro("Ernesto Mario Haberkorn", "Um Bate-papo sobre T.I", 2, 5555);
 
+        List<Livro> lista = new ArrayList<>();
+
         Acervo acervo = new Acervo();
-        acervo.addListaInicial(l1);
-        acervo.addListaInicial(l2);
-        acervo.addListaInicial(l3);
-        acervo.addListaInicial(l4);
-        acervo.addListaInicial(l5);
+        acervo.addListaInicial(lista, l1);
+        acervo.addListaInicial(lista,l2);
+        acervo.addListaInicial(lista, l3);
+        acervo.addListaInicial(lista, l4);
+        acervo.addListaInicial(lista, l5);
 
-        //acervo.addLivroAcervo();
-        //acervo.listarAcervo();
+        //acervo.addLivroAcervo(lista);
+        //acervo.listarAcervo(lista);
 
-        Alugueis al = new Alugueis();
-
-
-        al.listarEmprestimos();
-
-
+        Emprestimo emp = new Emprestimo();
     }
 }
