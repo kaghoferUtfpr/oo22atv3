@@ -2,59 +2,17 @@ package br.edu.utfpr;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Emprestimo {
 
+    private int codigo;
     private Livro livro;
     private Datas dataLocacao;
     private Datas dataDevolucao;
     private Status status;
 
-    public Emprestimo(Livro livro, Datas dataLocacao, Datas dataDevolucao, Status status) {
-        this.livro = livro;
-        this.dataLocacao = dataLocacao;
-        this.dataDevolucao = dataDevolucao;
-        this.status = status;
-    }
-
-    public Emprestimo() {
-    }
-
-    public Livro getLivro() {
-        return livro;
-    }
-
-    public void setLivro(Livro livro) {
-        this.livro = livro;
-    }
-
-    public void getDataLocacao() {
-    }
-
-    public void setDataLocacao(Datas dataLocacao) {
-        this.dataLocacao = dataLocacao;
-    }
-
-    public Datas getDataDevolucao() {
-        return dataDevolucao;
-    }
-
-    public void setDataDevolucao(Datas dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public LocalDate diaHoje() {
-        LocalDate lc = LocalDate.now();
-        return lc;
-    }
 
 
     public long validarEntrega(Datas data){

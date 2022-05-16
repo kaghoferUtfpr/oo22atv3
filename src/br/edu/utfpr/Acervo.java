@@ -6,14 +6,12 @@ import java.util.Scanner;
 
 public class Acervo {
 
-    private final List<Livro> livros = new ArrayList<>();
-
-    public void listarAcervo()
+    public void listarAcervo(List<Livro> livros)
     {
         livros.forEach(l -> System.out.printf("Autor: %s" + "\t" + "Livro: %s\n",l.getAutor(), l.getTitulo()));
     }
 
-    public void addLivroAcervo()
+    public void addLivroAcervo(List<Livro> lista)
     {
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o nome do autor: ");
@@ -25,12 +23,12 @@ public class Acervo {
         System.out.println("Insira um código para o livro: ");
         int cod = sc.nextInt();
         Livro l = new Livro(autor,titulo,qtdDisp, cod);
-        livros.add(l);
+        lista.add(l);
     }
 
-    public void addListaInicial(Livro livro)
+    public void addListaInicial(List<Livro> livros,Livro l)
     {
-        livros.add(livro);
+        livros.add(l);
     }
 
 }
