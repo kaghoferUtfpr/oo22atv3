@@ -2,10 +2,10 @@ package br.edu.utfpr;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Emprestimo {
+
 
     private int codigo;
     private Livro livro;
@@ -14,6 +14,23 @@ public class Emprestimo {
     private Status status;
 
 
+    public Emprestimo(int codigo, Livro livro, Datas dataLocacao, Datas dataDevolucao) {
+        this.codigo = codigo;
+        this.livro = livro;
+        this.dataLocacao = dataLocacao;
+        this.dataDevolucao = dataDevolucao;
+    }
+
+    public static void imprimirListaEmprestimos(List<Emprestimo> lista)
+    {
+        for (int i = 0; i < lista.size(); i++) {
+            System.out.println(lista.get(i).codigo);
+            System.out.println(lista.get(i).dataDevolucao.getDia());
+            System.out.println(lista.get(i).dataLocacao.getDia());
+            System.out.println(lista.get(i).livro.getAutor());
+
+        }
+    }
 
     public long validarEntrega(Datas data){
 
