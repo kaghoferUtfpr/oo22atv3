@@ -13,7 +13,6 @@ public class Emprestimo {
     private Datas dataDevolucao;
     private Status status;
 
-
     public Emprestimo(int codigo, Livro livro, Datas dataLocacao, Datas dataDevolucao) {
         this.codigo = codigo;
         this.livro = livro;

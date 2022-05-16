@@ -20,6 +20,7 @@ public class Main {
     public static void main(String[] args) throws ParseException {
 
         int codLivro = 1;
+        int codEmprestimo = 1;
 
         Livro l1 = new Livro("Erik Brynjolfsson e Andrew Mcafee", "A Segunda Era das Máquinas", 2, codLivro);
         codLivro++;
@@ -91,9 +92,5 @@ public class Main {
                     break;
             }
         } while (opcao != 0);
-
-//        Emprestimo.imprimirListaEmprestimos(listaEmprestimos);
-
-
     }
 }
