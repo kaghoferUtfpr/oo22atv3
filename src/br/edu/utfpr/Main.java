@@ -44,6 +44,19 @@ public class Main {
 
         List<Emprestimo> listaEmprestimos = new ArrayList<>();
 
+        Datas d1 = new Datas(10,05,2022);
+        Datas d2 = new Datas(17,05,2022);
+
+        Pessoa p1 = new Pessoa("Daniel", "32894327328947");
+
+        Emprestimo emp1 = new Emprestimo(1,l1, d1, d2, p1);
+        Emprestimo emp2 = new Emprestimo(1,l2, d1, d2, p1);
+
+
+        listaEmprestimos.add(emp1);
+        listaEmprestimos.add(emp2);
+
+
 
         int opcao;
         do {

@@ -11,26 +11,31 @@ public class Emprestimo {
     private Livro livro;
     private Datas dataLocacao;
     private Datas dataDevolucao;
+    private Pessoa pessoa;
+
     private Status status;
 
-    public Emprestimo(int codigo, Livro livro, Datas dataLocacao, Datas dataDevolucao) {
+
+    public Emprestimo(int codigo, Livro livro, Datas dataLocacao, Datas dataDevolucao, Pessoa p) {
         this.codigo = codigo;
         this.livro = livro;
         this.dataLocacao = dataLocacao;
         this.dataDevolucao = dataDevolucao;
+        this.pessoa = p;
     }
 
-    public static void imprimirListaEmprestimos(List<Emprestimo> lista)
-    {
+    public static void imprimirListaEmprestimos(List<Emprestimo> lista) {
         for (int i = 0; i < lista.size(); i++) {
-            System.out.println(lista.get(i).codigo);
-            System.out.println(lista.get(i).dataDevolucao.getDia());
-            System.out.println(lista.get(i).dataLocacao.getDia());
-            System.out.println(lista.get(i).livro.getAutor());
+            System.out.println("COD LIVRO: " + lista.get(i).codigo);
+            System.out.println("Nome = " + lista.get(i).pessoa.getNome());
+            System.out.printf("Locação: %d/%d/%d\n", lista.get(i).dataLocacao.getDia(), lista.get(i).dataLocacao.getMes(), lista.get(i).dataLocacao.getAno());
+            System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).dataDevolucao.getDia(), lista.get(i).dataDevolucao.getMes(), lista.get(i).dataDevolucao.getAno());
+            System.out.printf("Livro: %s De: %s\n", lista.get(i).livro.getTitulo(), lista.get(i).livro.getAutor());
+            System.out.println("******************");
         }
     }
 
-    public long validarEntrega(Datas data){
+    public long validarEntrega(Datas data) {
 
         LocalDate d1 = LocalDate.of(data.getAno(), data.getMes(), data.getDia());
         LocalDate d2 = LocalDate.now();
@@ -39,22 +44,19 @@ public class Emprestimo {
         return days;
     }
 
-    public Double validarMulta(long dias, Double multaDiaria,Double multaAcimaLimite, Double multaLimite)
-    {
+    public Double validarMulta(long dias, Double multaDiaria, Double multaAcimaLimite, Double multaLimite) {
         Double valorMulta = dias * multaDiaria;
         Double diasComMultaPadrao, diasComMultaAux, totalMulta;
 
         int multaExtra = 0;
 
-        if(dias > 7){
-            if(valorMulta > multaLimite){
-                diasComMultaAux = (valorMulta-multaLimite)/multaDiaria;
+        if (dias > 7) {
+            if (valorMulta > multaLimite) {
+                diasComMultaAux = (valorMulta - multaLimite) / multaDiaria;
                 diasComMultaPadrao = dias - diasComMultaAux;
-                totalMulta = ((diasComMultaPadrao*multaDiaria) + (diasComMultaAux*multaAcimaLimite));
+                totalMulta = ((diasComMultaPadrao * multaDiaria) + (diasComMultaAux * multaAcimaLimite));
                 return totalMulta;
-            }
-            else
-            {
+            } else {
                 return valorMulta;
             }
         }
