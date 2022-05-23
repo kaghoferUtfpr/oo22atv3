@@ -45,12 +45,16 @@ public class Acervo {
         }
         return null;
     }
+    public Livro encontrarPorCod2(int cod, List<Livro> lista) {
+        lista.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel()-1));
+        return null;
+    }
 
     public void cadastrarReserva(Datas data, int codLivro) {
         Livro l = encontrarPorCod(codLivro, Bancos.bancoLivros);
         System.out.println(l.getQtdDisponivel());
-        if (l != null && disponibilidadeQtd(codLivro)) {
-            Bancos.bancoLivros.get(codLivro).setQtdDisponivel(Bancos.bancoLivros.get(codLivro).getQtdDisponivel()-1);
+        if (l != null) {
+            Bancos.bancoLivros.get(codLivro).setQtdDisponivel(Bancos.bancoLivros.get(codLivro).getQtdDisponivel() - 1);
             Reserva r = new Reserva(l, data);
             Bancos.bancoReservas.add(r);
         } else {
@@ -58,14 +62,13 @@ public class Acervo {
         }
     }
 
-    public boolean disponibilidadeQtd(int codLivro)
-    {
-        Livro l = encontrarPorCod(codLivro, Bancos.bancoLivros);
-        if(l.getQtdDisponivel() > 0){
-            return true;
-        }
-        return false;
-    }
+//    public boolean disponibilidadeQtd(int codLivro) {
+//        //int d = Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == codLivro).forEach(Livro::getQtdDisponivel);
+//        if (l.getQtdDisponivel() > 0) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public void removerLivro(int cod, List<Livro> lista) {
         for (int i = 0; i < lista.size(); i++) {

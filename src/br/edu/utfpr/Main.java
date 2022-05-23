@@ -70,6 +70,7 @@ public class Main {
             System.out.println("6 - Listar Acervo");
             System.out.println("7 - Listar Empréstimos");
             System.out.println("8 - Listar Reservas");
+            System.out.println("9 - Testar Funcoes:");
             System.out.println("0 - SAIR");
             System.out.println("Insira uma opção: ");
             opcao = sc.nextInt();
@@ -116,6 +117,9 @@ public class Main {
                 case 8:
                     System.out.println("Lista de Reservas: ");
                     acervo.listarReservas(Bancos.bancoReservas);
+                    break;
+                case 9:
+                    acervo.encontrarPorCod2(1, Bancos.bancoLivros);
                     break;
                 default:
                     System.out.println("Opção Inválida");
