@@ -3,6 +3,7 @@ package br.edu.utfpr;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.BinaryOperator;
 
 public class Acervo {
 
@@ -37,38 +38,55 @@ public class Acervo {
         Bancos.bancoLivros.add(l);
     }
 
-    public Livro encontrarPorCod(int cod, List<Livro> lista) {
-        for (int i = 0; i < lista.size(); i++) {
-            if (cod == lista.get(i).getCodigo()) {
-                return lista.get(i);
+    public Livro encontrarPorCod(int cod) {
+        for (int i = 0; i < Bancos.bancoLivros.size(); i++) {
+            if (cod == Bancos.bancoLivros.get(i).getCodigo()) {
+                return Bancos.bancoLivros.get(i);
             }
         }
         return null;
     }
-    public Livro encontrarPorCod2(int cod, List<Livro> lista) {
-        lista.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel()-1));
-        return null;
+
+    public void decrementarQtd(int cod) {
+        Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel()-1));
+    }
+    public void acrescentarQtd(int cod) {
+        Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel()+1));
     }
 
     public void cadastrarReserva(Datas data, int codLivro) {
-        Livro l = encontrarPorCod(codLivro, Bancos.bancoLivros);
+        Livro l = encontrarPorCod(codLivro);
         System.out.println(l.getQtdDisponivel());
-        if (l != null) {
-            Bancos.bancoLivros.get(codLivro).setQtdDisponivel(Bancos.bancoLivros.get(codLivro).getQtdDisponivel() - 1);
+        if (l != null && disponibilidadeQtd(codLivro)) {
             Reserva r = new Reserva(l, data);
             Bancos.bancoReservas.add(r);
-        } else {
-            System.out.println("Erro Data ou Código do Livro não existe, ou fora de estoque");
         }
     }
 
-//    public boolean disponibilidadeQtd(int codLivro) {
-//        //int d = Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == codLivro).forEach(Livro::getQtdDisponivel);
-//        if (l.getQtdDisponivel() > 0) {
-//            return true;
-//        }
-//        return false;
-//    }
+    public boolean disponibilidadeData(Datas data, int codLivro)
+    {
+        if(encontrarPorCod(codLivro) != null)
+        {
+            Livro l = encontrarPorCod(codLivro);
+            //if(Bancos.bancoReservas)
+            return true;
+        }
+        return false;
+    }
+
+    public boolean disponibilidadeQtd(int codLivro) {
+        int qtd;
+        for (int i = 0; i < Bancos.bancoLivros.size(); i++) {
+            if(codLivro == Bancos.bancoLivros.get(i).getCodigo())
+            {
+                qtd = Bancos.bancoLivros.get(i).getQtdDisponivel();
+                if(qtd > 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public void removerLivro(int cod, List<Livro> lista) {
         for (int i = 0; i < lista.size(); i++) {

@@ -9,27 +9,28 @@ public class Emprestimo {
 
     private int codigo;
     private Livro livro;
-    private Datas dataLocacao;
-    private Datas dataDevolucao;
+    private LocalDate dataLocacao;
+    private LocalDate dataDevolucao;
     private Pessoa pessoa;
 
     private Status status;
 
 
-    public Emprestimo(int codigo, Livro livro, Datas dataLocacao, Datas dataDevolucao, Pessoa p) {
+    public Emprestimo(int codigo, Livro livro, LocalDate dataLocacao, Pessoa p) {
         this.codigo = codigo;
         this.livro = livro;
         this.dataLocacao = dataLocacao;
-        this.dataDevolucao = dataDevolucao;
+        this.dataDevolucao = dataLocacao.plusDays(7);
         this.pessoa = p;
+
     }
 
     public static void imprimirListaEmprestimos(List<Emprestimo> lista) {
         for (int i = 0; i < lista.size(); i++) {
             System.out.println("COD LIVRO: " + lista.get(i).codigo);
             System.out.println("Nome = " + lista.get(i).pessoa.getNome());
-            System.out.printf("Locação: %d/%d/%d\n", lista.get(i).dataLocacao.getDia(), lista.get(i).dataLocacao.getMes(), lista.get(i).dataLocacao.getAno());
-            System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).dataDevolucao.getDia(), lista.get(i).dataDevolucao.getMes(), lista.get(i).dataDevolucao.getAno());
+            System.out.printf("Locação: %d/%d/%d\n", lista.get(i).dataLocacao.getDayOfMonth(), lista.get(i).dataLocacao.getMonthValue(), lista.get(i).dataLocacao.getYear());
+            System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).dataDevolucao.getDayOfMonth(), lista.get(i).dataDevolucao.getMonthValue(), lista.get(i).dataDevolucao.getYear());
             System.out.printf("Livro: %s De: %s\n", lista.get(i).livro.getTitulo(), lista.get(i).livro.getAutor());
             System.out.println("******************");
         }
@@ -58,6 +59,7 @@ public class Emprestimo {
                 return totalMulta;
             } else {
                 return valorMulta;
+                //teste
             }
         }
         return 0.0;

@@ -12,6 +12,8 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
  */
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -46,13 +48,12 @@ public class Main {
 
         List<Emprestimo> listaEmprestimos = new ArrayList<>();
 
-        Datas d1 = new Datas(10, 05, 2022);
-        Datas d2 = new Datas(17, 05, 2022);
+        LocalDate d1 = LocalDate.now();
 
-        Pessoa p1 = new Pessoa("Daniel", "32894327328947");
+        Pessoa p1 = new Pessoa("Daniel");
 
-        Emprestimo emp1 = new Emprestimo(1, l1, d1, d2, p1);
-        Emprestimo emp2 = new Emprestimo(1, l2, d1, d2, p1);
+        Emprestimo emp1 = new Emprestimo(1, l1, d1, p1);
+        Emprestimo emp2 = new Emprestimo(1, l2, d1, p1);
 
 
         listaEmprestimos.add(emp1);
@@ -119,7 +120,7 @@ public class Main {
                     acervo.listarReservas(Bancos.bancoReservas);
                     break;
                 case 9:
-                    acervo.encontrarPorCod2(1, Bancos.bancoLivros);
+                   //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
                     break;
                 default:
                     System.out.println("Opção Inválida");
