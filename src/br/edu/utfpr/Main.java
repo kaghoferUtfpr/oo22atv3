@@ -11,9 +11,10 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
 - caso tenha vencido calcular 50 centavos ao dia até 20 reais, depois 1 real por dia
  */
 
+import br.edu.utfpr.Controller.ReservaController;
+
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -35,20 +36,27 @@ public class Main {
         codLivro++;
         Livro l5 = new Livro("Ernesto Mario Haberkorn", "Um Bate-papo sobre T.I", 2, codLivro);
         codLivro++;
+        Livro l6 = new Livro("Ernesto Mario Haberkorn", "Teste", 1, codLivro);
+        codLivro++;
 
         List<Livro> listaLivros = new ArrayList<>();
+        ReservaController reservaController = new ReservaController();
 
         Bancos.bancoLivros.add(l1);
         Bancos.bancoLivros.add(l2);
         Bancos.bancoLivros.add(l3);
         Bancos.bancoLivros.add(l4);
         Bancos.bancoLivros.add(l5);
+        Bancos.bancoLivros.add(l6);
 
         Acervo acervo = new Acervo();
 
         List<Emprestimo> listaEmprestimos = new ArrayList<>();
 
-        LocalDate d1 = LocalDate.now();
+        LocalDate d1 = LocalDate.of(2022,5,5);
+        LocalDate between = LocalDate.of(2022,5,10);
+        LocalDate d2 = LocalDate.now();
+
 
         Pessoa p1 = new Pessoa("Daniel");
 
@@ -56,8 +64,8 @@ public class Main {
         Emprestimo emp2 = new Emprestimo(1, l2, d1, p1);
 
 
-        listaEmprestimos.add(emp1);
-        listaEmprestimos.add(emp2);
+        //Bancos.bancoEmprestimos.add(emp1);
+        //Bancos.bancoEmprestimos.add(emp2);
 
 
         int opcao;
@@ -95,13 +103,15 @@ public class Main {
                     mes = sc.nextInt();
                     System.out.println("Insira o Ano");
                     ano = sc.nextInt();
-                    Datas d = new Datas(dia, mes, ano);
+                    LocalDate d = LocalDate.of(ano, mes, dia);
                     System.out.println("Insira o Código do Livr0: ");
                     int cod = sc.nextInt();
                     acervo.cadastrarReserva(d, cod);
                     break;
                 case 4:
-
+                    System.out.println("Insira o Cod. do Livro ");
+                    Bancos.bancoEmprestimos.add(acervo.cadastrarEmprestimo(sc.nextInt(),codEmprestimo));
+                    codEmprestimo++;
                     break;
                 case 5:
                     System.out.println("Listar Acervo: ");
@@ -113,7 +123,7 @@ public class Main {
                     break;
                 case 7:
                     System.out.println("Listar Emprestimos: ");
-                    Emprestimo.imprimirListaEmprestimos(listaEmprestimos);
+                    Acervo.imprimirListaEmprestimos(Bancos.bancoEmprestimos);
                     break;
                 case 8:
                     System.out.println("Lista de Reservas: ");
@@ -121,6 +131,7 @@ public class Main {
                     break;
                 case 9:
                    //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
+                    acervo.dataEntrePeriodo(d1,d2,between);
                     break;
                 default:
                     System.out.println("Opção Inválida");

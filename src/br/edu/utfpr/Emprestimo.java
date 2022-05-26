@@ -2,7 +2,6 @@ package br.edu.utfpr;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class Emprestimo {
 
@@ -13,8 +12,48 @@ public class Emprestimo {
     private LocalDate dataDevolucao;
     private Pessoa pessoa;
 
-    private Status status;
+    public int getCodigo() {
+        return codigo;
+    }
 
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public Livro getLivro() {
+        return livro;
+    }
+
+    public void setLivro(Livro livro) {
+        this.livro = livro;
+    }
+
+    public LocalDate getDataLocacao() {
+        return dataLocacao;
+    }
+
+    public void setDataLocacao(LocalDate dataLocacao) {
+        this.dataLocacao = dataLocacao;
+    }
+
+    public LocalDate getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public void setDataDevolucao(LocalDate dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public Emprestimo() {
+    }
 
     public Emprestimo(int codigo, Livro livro, LocalDate dataLocacao, Pessoa p) {
         this.codigo = codigo;
@@ -22,19 +61,9 @@ public class Emprestimo {
         this.dataLocacao = dataLocacao;
         this.dataDevolucao = dataLocacao.plusDays(7);
         this.pessoa = p;
-
     }
 
-    public static void imprimirListaEmprestimos(List<Emprestimo> lista) {
-        for (int i = 0; i < lista.size(); i++) {
-            System.out.println("COD LIVRO: " + lista.get(i).codigo);
-            System.out.println("Nome = " + lista.get(i).pessoa.getNome());
-            System.out.printf("Locação: %d/%d/%d\n", lista.get(i).dataLocacao.getDayOfMonth(), lista.get(i).dataLocacao.getMonthValue(), lista.get(i).dataLocacao.getYear());
-            System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).dataDevolucao.getDayOfMonth(), lista.get(i).dataDevolucao.getMonthValue(), lista.get(i).dataDevolucao.getYear());
-            System.out.printf("Livro: %s De: %s\n", lista.get(i).livro.getTitulo(), lista.get(i).livro.getAutor());
-            System.out.println("******************");
-        }
-    }
+
 
     public long validarEntrega(Datas data) {
 
