@@ -59,7 +59,7 @@ public class Emprestimo {
         this.codigo = codigo;
         this.livro = livro;
         this.dataLocacao = dataLocacao;
-        this.dataDevolucao = dataLocacao.plusDays(7);
+        this.dataDevolucao = dataLocacao.plusDays(15);
         this.pessoa = p;
     }
 

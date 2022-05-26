@@ -121,28 +121,34 @@ public class Acervo {
     }
 
     public Emprestimo cadastrarEmprestimo(int codLivro, int codEmprestimo) {
-        Emprestimo emp = new Emprestimo();
-        if (disponibilidadeQtd(codLivro)) {
-            System.out.println("Insira nome da pessoa: ");
-            Pessoa p = new Pessoa(sc.nextLine());
-            emp.setPessoa(p);
-            emp.setLivro(encontrarPorCod(codLivro));
-            emp.setDataLocacao(LocalDate.now());
-            emp.setDataDevolucao(LocalDate.now().plusDays(15));
-            emp.setCodigo(codEmprestimo);
-            decrementarQtd(codLivro);
+        System.out.println("Insira nome da pessoa: ");
+        Pessoa p = new Pessoa(sc.nextLine());
+        if (checarReserva(p.getNome(), LocalDate.now(), codLivro)) {
+            Emprestimo emp = new Emprestimo();
+            if (disponibilidadeQtd(codLivro)) {
+                System.out.println("Insira nome da pessoa: ");
+                emp.setPessoa(p);
+                emp.setLivro(encontrarPorCod(codLivro));
+                emp.setDataLocacao(LocalDate.now());
+                emp.setDataDevolucao(LocalDate.now().plusDays(15));
+                emp.setCodigo(codEmprestimo);
+                decrementarQtd(codLivro);
+            } else {
+                System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
+                LocalDate data = disponibilidadeReserva(codLivro);
+                System.out.printf("Reservas à partir de: %d/%d/%d\n", data.getDayOfMonth(), data.getDayOfMonth(), data.getYear());
+                return null;
+            }
+            return emp;
         } else {
-            System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
-            LocalDate data = disponibilidadeReserva(codLivro);
-            System.out.printf("Reservas à partir de: %d/%d/%d\n", data.getDayOfMonth(), data.getDayOfMonth(), data.getYear());
-            return null;
+            System.out.println("Livro Reservado");
         }
-        return emp;
+        return null;
     }
 
-    public long validarEntrega(Datas data) {
+    public long validarEntrega(LocalDate data) {
 
-        LocalDate d1 = LocalDate.of(data.getAno(), data.getMes(), data.getDia());
+        LocalDate d1 = LocalDate.of(data.getYear(), data.getMonthValue(), data.getDayOfMonth());
         LocalDate d2 = LocalDate.now();
 
         long days = ChronoUnit.DAYS.between(d1, d2);
@@ -168,5 +174,19 @@ public class Acervo {
         }
         return 0.0;
     }
+
+    public boolean checarReserva(String nome, LocalDate data, int codLivro) {
+        for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
+            if (Bancos.bancoReservas.get(i).getLivro().getCodigo() == codLivro) {
+                if (nome == Bancos.bancoReservas.get(i).getPessoa().getNome()) {
+                    return true;
+                } else if (data.isAfter(Bancos.bancoReservas.get(i).getDataPrazoFinal())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
 }
