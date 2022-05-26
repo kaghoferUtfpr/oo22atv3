@@ -1,10 +1,12 @@
 package br.edu.utfpr;
 
+import java.time.LocalDate;
+
 public class Reserva {
     private Livro livro;
-    private Datas dataReserva;
+    private LocalDate dataReserva;
 
-    public Reserva(Livro livro, Datas dataReserva) {
+    public Reserva(Livro livro, LocalDate dataReserva) {
         this.livro = livro;
         this.dataReserva = dataReserva;
     }
@@ -17,11 +19,11 @@ public class Reserva {
         this.livro = livro;
     }
 
-    public Datas getDataReserva() {
+    public LocalDate getDataReserva() {
         return dataReserva;
     }
 
-    public void setDataReserva(Datas dataReserva) {
+    public void setDataReserva(LocalDate dataReserva) {
         this.dataReserva = dataReserva;
     }
 }

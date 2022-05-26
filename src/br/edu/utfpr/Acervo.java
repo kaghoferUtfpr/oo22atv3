@@ -1,11 +1,12 @@
 package br.edu.utfpr;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.BinaryOperator;
 
 public class Acervo {
+
+    Scanner sc = new Scanner(System.in);
 
     public void listarAcervo(List<Livro> livros) {
         if (livros.size() < 1) {
@@ -19,8 +20,8 @@ public class Acervo {
             System.out.println("Lista Vazia!");
         }
         lista.forEach(l -> System.out.printf("Cod: %d\tData Res: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s\n",
-                l.getLivro().getCodigo(), l.getDataReserva().getDia(),
-                l.getDataReserva().getMes(), l.getDataReserva().getAno(),
+                l.getLivro().getCodigo(), l.getDataReserva().getDayOfMonth(),
+                l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(),
                 l.getLivro().getAutor(), l.getLivro().getTitulo()));
     }
 
@@ -48,13 +49,14 @@ public class Acervo {
     }
 
     public void decrementarQtd(int cod) {
-        Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel()-1));
-    }
-    public void acrescentarQtd(int cod) {
-        Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel()+1));
+        Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel() - 1));
     }
 
-    public void cadastrarReserva(Datas data, int codLivro) {
+    public void acrescentarQtd(int cod) {
+        Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel() + 1));
+    }
+
+    public void cadastrarReserva(LocalDate data, int codLivro) {
         Livro l = encontrarPorCod(codLivro);
         System.out.println(l.getQtdDisponivel());
         if (l != null && disponibilidadeQtd(codLivro)) {
@@ -63,24 +65,28 @@ public class Acervo {
         }
     }
 
-    public boolean disponibilidadeData(Datas data, int codLivro)
-    {
-        if(encontrarPorCod(codLivro) != null)
-        {
-            Livro l = encontrarPorCod(codLivro);
-            //if(Bancos.bancoReservas)
-            return true;
+    public LocalDate disponibilidadeReserva(int codLivro) {
+        LocalDate dataDisp = null;
+        for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
+            if (Bancos.bancoEmprestimos.get(i).getLivro().getCodigo() == codLivro) {
+                if(dataDisp == null)
+                {
+                    dataDisp = Bancos.bancoEmprestimos.get(i).getDataDevolucao();
+                }
+                else if(dataDisp.isAfter(Bancos.bancoEmprestimos.get(i).getDataDevolucao())) {
+                    dataDisp = Bancos.bancoEmprestimos.get(i).getDataDevolucao();
+                }
+            }
         }
-        return false;
+        return dataDisp;
     }
 
     public boolean disponibilidadeQtd(int codLivro) {
         int qtd;
         for (int i = 0; i < Bancos.bancoLivros.size(); i++) {
-            if(codLivro == Bancos.bancoLivros.get(i).getCodigo())
-            {
+            if (codLivro == Bancos.bancoLivros.get(i).getCodigo()) {
                 qtd = Bancos.bancoLivros.get(i).getQtdDisponivel();
-                if(qtd > 0){
+                if (qtd > 0) {
                     return true;
                 }
             }
@@ -94,6 +100,45 @@ public class Acervo {
                 lista.remove(i);
             }
         }
+    }
+
+    public boolean dataEntrePeriodo(LocalDate d1, LocalDate d2, LocalDate dataReserva) {
+        if (dataReserva.isAfter(d1) && dataReserva.isBefore(d2)) {
+            System.out.println("está_entre");
+            return true;
+        }
+        return false;
+    }
+
+    public static void imprimirListaEmprestimos(List<Emprestimo> lista) {
+        for (int i = 0; i < lista.size(); i++) {
+            System.out.println("COD LIVRO: " + lista.get(i).getLivro().getCodigo());
+            System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
+            System.out.printf("Locação: %d/%d/%d\n", lista.get(i).getDataLocacao().getDayOfMonth(), lista.get(i).getDataLocacao().getMonthValue(), lista.get(i).getDataLocacao().getYear());
+            System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).getDataDevolucao().getDayOfMonth(), lista.get(i).getDataDevolucao().getMonthValue(), lista.get(i).getDataDevolucao().getYear());
+            System.out.printf("Livro: %s De: %s\n", lista.get(i).getLivro().getTitulo(), lista.get(i).getLivro().getAutor());
+            System.out.println("******************");
+        }
+    }
+
+    public Emprestimo cadastrarEmprestimo(int codLivro, int codEmprestimo) {
+        Emprestimo emp = new Emprestimo();
+        if (disponibilidadeQtd(codLivro)) {
+            System.out.println("Insira nome da pessoa: ");
+            Pessoa p = new Pessoa(sc.nextLine());
+            emp.setPessoa(p);
+            emp.setLivro(encontrarPorCod(codLivro));
+            emp.setDataLocacao(LocalDate.now());
+            emp.setDataDevolucao(LocalDate.now().plusDays(15));
+            emp.setCodigo(codEmprestimo);
+            decrementarQtd(codLivro);
+        } else {
+            System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
+            LocalDate data = disponibilidadeReserva(codLivro);
+            System.out.printf("Reservas à partir de: %d/%d/%d\n",data.getDayOfMonth() ,data.getDayOfMonth(),data.getYear());
+            return null;
+        }
+        return emp;
     }
 
 }
