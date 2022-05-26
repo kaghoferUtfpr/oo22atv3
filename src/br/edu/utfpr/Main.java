@@ -71,7 +71,6 @@ public class Main {
 
         int opcao;
         do {
-
             System.out.println("1 - Cadastrar Livro");
             System.out.println("2 - Deletar Livro");
             System.out.println("3 - Reservar Livro");
