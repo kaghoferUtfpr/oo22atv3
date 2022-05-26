@@ -1,6 +1,7 @@
 package br.edu.utfpr;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Scanner;
 
@@ -69,11 +70,9 @@ public class Acervo {
         LocalDate dataDisp = null;
         for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
             if (Bancos.bancoEmprestimos.get(i).getLivro().getCodigo() == codLivro) {
-                if(dataDisp == null)
-                {
+                if (dataDisp == null) {
                     dataDisp = Bancos.bancoEmprestimos.get(i).getDataDevolucao();
-                }
-                else if(dataDisp.isAfter(Bancos.bancoEmprestimos.get(i).getDataDevolucao())) {
+                } else if (dataDisp.isAfter(Bancos.bancoEmprestimos.get(i).getDataDevolucao())) {
                     dataDisp = Bancos.bancoEmprestimos.get(i).getDataDevolucao();
                 }
             }
@@ -135,10 +134,39 @@ public class Acervo {
         } else {
             System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
             LocalDate data = disponibilidadeReserva(codLivro);
-            System.out.printf("Reservas à partir de: %d/%d/%d\n",data.getDayOfMonth() ,data.getDayOfMonth(),data.getYear());
+            System.out.printf("Reservas à partir de: %d/%d/%d\n", data.getDayOfMonth(), data.getDayOfMonth(), data.getYear());
             return null;
         }
         return emp;
+    }
+
+    public long validarEntrega(Datas data) {
+
+        LocalDate d1 = LocalDate.of(data.getAno(), data.getMes(), data.getDia());
+        LocalDate d2 = LocalDate.now();
+
+        long days = ChronoUnit.DAYS.between(d1, d2);
+        return days;
+    }
+
+    public Double validarMulta(long dias, Double multaDiaria, Double multaAcimaLimite, Double multaLimite) {
+        Double valorMulta = dias * multaDiaria;
+        Double diasComMultaPadrao, diasComMultaAux, totalMulta;
+
+        int multaExtra = 0;
+
+        if (dias > 15) {
+            if (valorMulta > multaLimite) {
+                diasComMultaAux = (valorMulta - multaLimite) / multaDiaria;
+                diasComMultaPadrao = dias - diasComMultaAux;
+                totalMulta = ((diasComMultaPadrao * multaDiaria) + (diasComMultaAux * multaAcimaLimite));
+                return totalMulta;
+            } else {
+                return valorMulta;
+                //teste
+            }
+        }
+        return 0.0;
     }
 
 }
