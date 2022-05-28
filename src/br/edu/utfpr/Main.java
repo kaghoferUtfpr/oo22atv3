@@ -104,9 +104,13 @@ public class Main {
                     System.out.println("Insira o Ano");
                     ano = sc.nextInt();
                     LocalDate d = LocalDate.of(ano, mes, dia);
-                    System.out.println("Insira o Código do Livr0: ");
+                    System.out.println("Insira o Código do Livro: ");
                     int cod = sc.nextInt();
-                    acervo.cadastrarReserva(d, cod);
+                    sc.nextLine();
+                    System.out.println("Nome: ");
+                    String nm = sc.nextLine();
+                    Pessoa pessoa = new Pessoa(nm);
+                    acervo.cadastrarReserva(d, cod, pessoa);
                     break;
                 case 4:
                     System.out.println("Insira o Cod. do Livro ");
