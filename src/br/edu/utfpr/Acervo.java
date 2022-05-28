@@ -20,10 +20,10 @@ public class Acervo {
         if (lista.size() < 1) {
             System.out.println("Lista Vazia!");
         }
-        lista.forEach(l -> System.out.printf("Cod: %d\tData Res: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s\n",
+        lista.forEach(l -> System.out.printf("Cod: %d\tData Res: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s \t Para: %s\n",
                 l.getLivro().getCodigo(), l.getDataReserva().getDayOfMonth(),
                 l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(),
-                l.getLivro().getAutor(), l.getLivro().getTitulo()));
+                l.getLivro().getAutor(), l.getLivro().getTitulo(), l.getPessoa().getNome()));
     }
 
 
@@ -57,16 +57,15 @@ public class Acervo {
         Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel() + 1));
     }
 
-    public void cadastrarReserva(LocalDate data, int codLivro) {
+    public void cadastrarReserva(LocalDate data, int codLivro, Pessoa pessoa) {
         Livro l = encontrarPorCod(codLivro);
-        System.out.println(l.getQtdDisponivel());
         if (l != null && disponibilidadeQtd(codLivro)) {
-            Reserva r = new Reserva(l, data);
+            Reserva r = new Reserva(l, data, pessoa);
             Bancos.bancoReservas.add(r);
         }
     }
 
-    public LocalDate disponibilidadeReserva(int codLivro) {
+    public LocalDate disponibilidadeDataReservaEmprestimo(int codLivro) {
         LocalDate dataDisp = null;
         for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
             if (Bancos.bancoEmprestimos.get(i).getLivro().getCodigo() == codLivro) {
@@ -110,13 +109,17 @@ public class Acervo {
     }
 
     public static void imprimirListaEmprestimos(List<Emprestimo> lista) {
-        for (int i = 0; i < lista.size(); i++) {
-            System.out.println("COD LIVRO: " + lista.get(i).getLivro().getCodigo());
-            System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
-            System.out.printf("Locação: %d/%d/%d\n", lista.get(i).getDataLocacao().getDayOfMonth(), lista.get(i).getDataLocacao().getMonthValue(), lista.get(i).getDataLocacao().getYear());
-            System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).getDataDevolucao().getDayOfMonth(), lista.get(i).getDataDevolucao().getMonthValue(), lista.get(i).getDataDevolucao().getYear());
-            System.out.printf("Livro: %s De: %s\n", lista.get(i).getLivro().getTitulo(), lista.get(i).getLivro().getAutor());
-            System.out.println("******************");
+        if (lista.isEmpty()) {
+            System.out.println("Lista Vazia!");
+        }else{
+            for (int i = 0; i < lista.size(); i++) {
+                System.out.println("COD LIVRO: " + lista.get(i).getLivro().getCodigo());
+                System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
+                System.out.printf("Locação: %d/%d/%d\n", lista.get(i).getDataLocacao().getDayOfMonth(), lista.get(i).getDataLocacao().getMonthValue(), lista.get(i).getDataLocacao().getYear());
+                System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).getDataDevolucao().getDayOfMonth(), lista.get(i).getDataDevolucao().getMonthValue(), lista.get(i).getDataDevolucao().getYear());
+                System.out.printf("Livro: %s De: %s\n", lista.get(i).getLivro().getTitulo(), lista.get(i).getLivro().getAutor());
+                System.out.println("******************");
+            }
         }
     }
 
@@ -135,7 +138,7 @@ public class Acervo {
                 decrementarQtd(codLivro);
             } else {
                 System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
-                LocalDate data = disponibilidadeReserva(codLivro);
+                LocalDate data = disponibilidadeDataReservaEmprestimo(codLivro);
                 System.out.printf("Reservas à partir de: %d/%d/%d\n", data.getDayOfMonth(), data.getDayOfMonth(), data.getYear());
                 return null;
             }
@@ -181,6 +184,8 @@ public class Acervo {
                 if (nome == Bancos.bancoReservas.get(i).getPessoa().getNome()) {
                     return true;
                 } else if (data.isAfter(Bancos.bancoReservas.get(i).getDataPrazoFinal())) {
+                    return true;
+                } else if (encontrarPorCod(codLivro).getQtdDisponivel() > 0) {
                     return true;
                 }
             }

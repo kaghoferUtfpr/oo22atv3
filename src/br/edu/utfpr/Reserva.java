@@ -9,10 +9,11 @@ public class Reserva {
     private LocalDate dataReserva;
     private LocalDate dataPrazoFinal;
 
-    public Reserva(Livro livro, LocalDate dataReserva) {
+    public Reserva(Livro livro, LocalDate dataReserva, Pessoa pessoa) {
         this.livro = livro;
         this.dataReserva = dataReserva;
         this.dataPrazoFinal = dataReserva.plusDays(2);
+        this.pessoa = pessoa;
     }
 
     public Pessoa getPessoa() {
