@@ -114,7 +114,8 @@ public class Main {
                     break;
                 case 4:
                     System.out.println("Insira o Cod. do Livro ");
-                    Bancos.bancoEmprestimos.add(acervo.cadastrarEmprestimo(sc.nextInt(),codEmprestimo));
+                    int cdLivro = sc.nextInt();
+                    acervo.cadastrarEmprestimo(cdLivro,codEmprestimo);
                     codEmprestimo++;
                     break;
                 case 5:

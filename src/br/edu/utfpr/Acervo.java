@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Scanner;
+
 public class Acervo {
 
     Scanner sc = new Scanner(System.in);
@@ -109,40 +110,42 @@ public class Acervo {
     }
 
     public static void imprimirListaEmprestimos() {
-        List<Emprestimo> lista = Bancos.bancoEmprestimos;
-        if (lista.isEmpty()) {
+        if (Bancos.bancoEmprestimos.isEmpty()) {
             System.out.println("Lista Vazia!");
-        }else{
-            for (int i = 0; i < lista.size(); i++) {
-                System.out.println("COD LIVRO: " + lista.get(i).getLivro().getCodigo());
-                System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
-                System.out.printf("Locação: %d/%d/%d\n", lista.get(i).getDataLocacao().getDayOfMonth(), lista.get(i).getDataLocacao().getMonthValue(), lista.get(i).getDataLocacao().getYear());
-                System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).getDataDevolucao().getDayOfMonth(), lista.get(i).getDataDevolucao().getMonthValue(), lista.get(i).getDataDevolucao().getYear());
-                System.out.printf("Livro: %s De: %s\n", lista.get(i).getLivro().getTitulo(), lista.get(i).getLivro().getAutor());
-                System.out.println("******************");
-            }
+        } else {
+            Bancos.bancoEmprestimos.forEach(i -> {
+                System.out.println(i.getLivro().getAutor());
+            });
+
+//            for (int i = 0; i < lista.size(); i++) {
+//                System.out.println("COD LIVRO: " + lista.get(i).getLivro().getCodigo());
+//                System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
+//                System.out.printf("Locação: %d/%d/%d\n", lista.get(i).getDataLocacao().getDayOfMonth(), lista.get(i).getDataLocacao().getMonthValue(), lista.get(i).getDataLocacao().getYear());
+//                System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).getDataDevolucao().getDayOfMonth(), lista.get(i).getDataDevolucao().getMonthValue(), lista.get(i).getDataDevolucao().getYear());
+//                System.out.printf("Livro: %s De: %s\n", lista.get(i).getLivro().getTitulo(), lista.get(i).getLivro().getAutor());
+//                System.out.println("******************");
+//            }
         }
     }
 
-    public void apagarReservasAntigas()
-    {
+    public void apagarReservasAntigas() {
         for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
-            if (Bancos.bancoReservas.get(i).getDataPrazoFinal().isBefore(LocalDate.now())){
+            if (Bancos.bancoReservas.get(i).getDataPrazoFinal().isBefore(LocalDate.now())) {
                 Bancos.bancoReservas.remove(i);
             }
         }
     }
 
-    public void apagarReserva(String nome){
+    public void apagarReserva(String nome) {
         for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
-            if (Bancos.bancoReservas.get(i).getPessoa().getNome().equals(nome)){
+            if (Bancos.bancoReservas.get(i).getPessoa().getNome().equals(nome)) {
                 Bancos.bancoReservas.remove(i);
             }
         }
     }
 
-    public Emprestimo cadastrarEmprestimo(int codLivro, int codEmprestimo) {
-        apagarReservasAntigas();
+    public void cadastrarEmprestimo(int codLivro, int codEmprestimo) {
+        //apagarReservasAntigas();
         System.out.println("Insira nome da pessoa: ");
         Pessoa p = new Pessoa(sc.nextLine());
         apagarReserva(p.getNome());
@@ -156,22 +159,20 @@ public class Acervo {
                 emp.setDataDevolucao(LocalDate.now().plusDays(15));
                 emp.setCodigo(codEmprestimo);
                 decrementarQtd(codLivro);
+                Bancos.bancoEmprestimos.add(emp);
             } else {
                 System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
                 LocalDate data = disponibilidadeDataReservaEmprestimo(codLivro);
                 System.out.printf("Reservas à partir de: %d/%d/%d\n", data.getDayOfMonth(), data.getDayOfMonth(), data.getYear());
-                return null;
             }
-            return emp;
         } else {
             System.out.println("Livro Reservado");
         }
-        return null;
     }
 
-    public void diaParaReservar(int codLivro){
+    public void diaParaReservar(int codLivro) {
         long result = Bancos.bancoEmprestimos.stream().filter(e -> e.getLivro().getCodigo() == codLivro).count();
-        System.out.println("Qdt: "+ result);
+        System.out.println("Qdt: " + result);
     }
 
     public long qtdDiasEmprestimo(LocalDate data) {
@@ -218,17 +219,17 @@ public class Acervo {
         return false;
     }
 
-    public void devolverEmprestimo(int codEmprestimo){
+    public void devolverEmprestimo(int codEmprestimo) {
         for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
-            if(Bancos.bancoEmprestimos.get(i).getCodigo()==codEmprestimo){
+            if (Bancos.bancoEmprestimos.get(i).getCodigo() == codEmprestimo) {
                 System.out.println("Dados Devolução: ");
                 System.out.println("Nome: " + Bancos.bancoEmprestimos.get(i).getPessoa().getNome());
                 System.out.printf("Livro: %s\t Autor: %s\n", Bancos.bancoEmprestimos.get(i).getLivro().getTitulo(), Bancos.bancoEmprestimos.get(i).getLivro().getAutor());
                 long dias = qtdDiasEmprestimo(Bancos.bancoEmprestimos.get(i).getDataLocacao());
-                double multa = validarMulta(dias, 0.5, 1.0,20.0);
-                if(multa == 0.0){
+                double multa = validarMulta(dias, 0.5, 1.0, 20.0);
+                if (multa == 0.0) {
                     System.out.println("Devolução dentro do prazo.");
-                }else {
+                } else {
                     System.out.printf("Existe um valor à pagar de: R$ %.2f\n", multa);
                 }
             }
