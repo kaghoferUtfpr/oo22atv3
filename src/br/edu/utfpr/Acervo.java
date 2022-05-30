@@ -110,21 +110,19 @@ public class Acervo {
     }
 
     public static void imprimirListaEmprestimos() {
+        List<Emprestimo> lista = Bancos.bancoEmprestimos;
         if (Bancos.bancoEmprestimos.isEmpty()) {
             System.out.println("Lista Vazia!");
         } else {
-            Bancos.bancoEmprestimos.forEach(i -> {
-                System.out.println(i.getLivro().getAutor());
-            });
 
-//            for (int i = 0; i < lista.size(); i++) {
-//                System.out.println("COD LIVRO: " + lista.get(i).getLivro().getCodigo());
-//                System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
-//                System.out.printf("Locação: %d/%d/%d\n", lista.get(i).getDataLocacao().getDayOfMonth(), lista.get(i).getDataLocacao().getMonthValue(), lista.get(i).getDataLocacao().getYear());
-//                System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).getDataDevolucao().getDayOfMonth(), lista.get(i).getDataDevolucao().getMonthValue(), lista.get(i).getDataDevolucao().getYear());
-//                System.out.printf("Livro: %s De: %s\n", lista.get(i).getLivro().getTitulo(), lista.get(i).getLivro().getAutor());
-//                System.out.println("******************");
-//            }
+            for (int i = 0; i < lista.size(); i++) {
+                System.out.println("COD EMPRÉSTIMO: " + lista.get(i).getCodigo());
+                System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
+                System.out.printf("Locação: %d/%d/%d\n", lista.get(i).getDataLocacao().getDayOfMonth(), lista.get(i).getDataLocacao().getMonthValue(), lista.get(i).getDataLocacao().getYear());
+                System.out.printf("Devolução: %d/%d/%d\n", lista.get(i).getDataDevolucao().getDayOfMonth(), lista.get(i).getDataDevolucao().getMonthValue(), lista.get(i).getDataDevolucao().getYear());
+                System.out.printf("Livro: %s De: %s\n", lista.get(i).getLivro().getTitulo(), lista.get(i).getLivro().getAutor());
+                System.out.println("******************");
+            }
         }
     }
 
@@ -132,6 +130,14 @@ public class Acervo {
         for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
             if (Bancos.bancoReservas.get(i).getDataPrazoFinal().isBefore(LocalDate.now())) {
                 Bancos.bancoReservas.remove(i);
+            }
+        }
+    }
+
+    public void apagarEmprestimo(int codEmprestimo) {
+        for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
+            if (Bancos.bancoEmprestimos.get(i).getCodigo() == codEmprestimo) {
+                Bancos.bancoEmprestimos.remove(i);
             }
         }
     }
@@ -149,24 +155,20 @@ public class Acervo {
         System.out.println("Insira nome da pessoa: ");
         Pessoa p = new Pessoa(sc.nextLine());
         apagarReserva(p.getNome());
-        if (checarReserva(p.getNome(), LocalDate.now(), codLivro)) {
-            Emprestimo emp = new Emprestimo();
-            if (disponibilidadeQtd(codLivro)) {
-                System.out.println("Insira nome da pessoa: ");
-                emp.setPessoa(p);
-                emp.setLivro(encontrarPorCod(codLivro));
-                emp.setDataLocacao(LocalDate.now());
-                emp.setDataDevolucao(LocalDate.now().plusDays(15));
-                emp.setCodigo(codEmprestimo);
-                decrementarQtd(codLivro);
-                Bancos.bancoEmprestimos.add(emp);
-            } else {
-                System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
-                LocalDate data = disponibilidadeDataReservaEmprestimo(codLivro);
-                System.out.printf("Reservas à partir de: %d/%d/%d\n", data.getDayOfMonth(), data.getDayOfMonth(), data.getYear());
-            }
+        Emprestimo emp = new Emprestimo();
+        if (disponibilidadeQtd(codLivro)) {
+            System.out.println("Insira nome da pessoa: ");
+            emp.setPessoa(p);
+            emp.setLivro(encontrarPorCod(codLivro));
+            emp.setDataLocacao(LocalDate.now());
+            emp.setDataDevolucao(LocalDate.now().plusDays(15));
+            emp.setCodigo(codEmprestimo);
+            decrementarQtd(codLivro);
+            Bancos.bancoEmprestimos.add(emp);
         } else {
-            System.out.println("Livro Reservado");
+            System.out.println("Fazer uma reserva, não tem disponibilidade imediata!");
+            LocalDate data = disponibilidadeDataReservaEmprestimo(codLivro);
+            System.out.printf("Reservas à partir de: %d/%d/%d\n", data.getDayOfMonth(), data.getDayOfMonth(), data.getYear());
         }
     }
 
@@ -229,8 +231,10 @@ public class Acervo {
                 double multa = validarMulta(dias, 0.5, 1.0, 20.0);
                 if (multa == 0.0) {
                     System.out.println("Devolução dentro do prazo.");
+                    apagarEmprestimo(codEmprestimo);
                 } else {
                     System.out.printf("Existe um valor à pagar de: R$ %.2f\n", multa);
+                    apagarEmprestimo(codEmprestimo);
                 }
             }
         }

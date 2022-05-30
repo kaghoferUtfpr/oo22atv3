@@ -61,12 +61,13 @@ public class Main {
 
         Pessoa p1 = new Pessoa("Daniel");
 
-        Emprestimo emp1 = new Emprestimo(1, l1, d1, p1);
-        Emprestimo emp2 = new Emprestimo(1, l2, d1, p1);
+        Emprestimo emp1 = new Emprestimo(codEmprestimo, l1, d1, p1);
+        codEmprestimo++;
+        Emprestimo emp2 = new Emprestimo(codEmprestimo, l2, d1, p1);
+        codEmprestimo++;
 
-
-        //Bancos.bancoEmprestimos.add(emp1);
-        //Bancos.bancoEmprestimos.add(emp2);
+        Bancos.bancoEmprestimos.add(emp1);
+        Bancos.bancoEmprestimos.add(emp2);
 
 
         int opcao;
@@ -119,8 +120,9 @@ public class Main {
                     codEmprestimo++;
                     break;
                 case 5:
-                    System.out.println("Listar Acervo: ");
-
+                    System.out.println("Devolver Livro: ");
+                    System.out.println("Insira o Cod. do Empréstimo: ");
+                    acervo.devolverEmprestimo(sc.nextInt());
                     break;
                 case 6:
                     System.out.println("Listar Acervo de Livros: ");
