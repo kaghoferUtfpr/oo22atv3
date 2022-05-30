@@ -5,6 +5,8 @@ public class Livro {
     private String autor;
     private String titulo;
     private int qtdDisponivel;
+
+    private int estoque;
     private int codigo;
 
     public Livro(Livro livro) {
@@ -22,6 +24,11 @@ public class Livro {
         this.titulo = titulo;
         this.qtdDisponivel = qtdDisponivel;
         this.codigo = codigo;
+        this.estoque = qtdDisponivel;
+    }
+
+    public int getEstoque() {
+        return estoque;
     }
 
     public String getAutor() {

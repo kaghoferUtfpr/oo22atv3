@@ -60,9 +60,14 @@ public class Acervo {
     public void cadastrarReserva(LocalDate data, int codLivro, Pessoa pessoa) {
         apagarReservasAntigas();
         Livro l = encontrarPorCod(codLivro);
-        if (l != null && disponibilidadeQtd(codLivro)) {
-            Reserva r = new Reserva(l, data, pessoa);
-            Bancos.bancoReservas.add(r);
+        long qtd = Bancos.bancoReservas.stream().filter(lv -> lv.getLivro().getCodigo() == codLivro).count();
+        if(qtd < l.getEstoque()) {
+            if (l != null && disponibilidadeQtd(codLivro)) {
+                Reserva r = new Reserva(l, data, pessoa);
+                Bancos.bancoReservas.add(r);
+            }
+        }else{
+            System.out.println("Reserva não pode ser feita, qtd indisponivel para a data");
         }
     }
 
@@ -210,17 +215,18 @@ public class Acervo {
     }
 
     public boolean checarReserva(String nome, LocalDate data, int codLivro) {
-        for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
-            if (Bancos.bancoReservas.get(i).getLivro().getCodigo() == codLivro) {
-                if (nome == Bancos.bancoReservas.get(i).getPessoa().getNome()) {
-                    return true;
-                } else if (data.isAfter(Bancos.bancoReservas.get(i).getDataPrazoFinal())) {
-                    return true;
-                } else if (encontrarPorCod(codLivro).getQtdDisponivel() > 0) {
-                    return true;
+
+            for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
+                if (Bancos.bancoReservas.get(i).getLivro().getCodigo() == codLivro) {
+                    if (nome == Bancos.bancoReservas.get(i).getPessoa().getNome()) {
+                        return true;
+                    } else if (data.isAfter(Bancos.bancoReservas.get(i).getDataPrazoFinal())) {
+                        return true;
+                    } else if (encontrarPorCod(codLivro).getQtdDisponivel() > 0) {
+                        return true;
+                    }
                 }
             }
-        }
         return false;
     }
 
