@@ -58,19 +58,20 @@ public class Main {
         LocalDate d2 = LocalDate.now();
 
 
+
         Pessoa p1 = new Pessoa("Daniel");
 
-        Emprestimo emp1 = new Emprestimo(1, l1, d1, p1);
-        Emprestimo emp2 = new Emprestimo(1, l2, d1, p1);
+        Emprestimo emp1 = new Emprestimo(codEmprestimo, l1, d1, p1);
+        codEmprestimo++;
+        Emprestimo emp2 = new Emprestimo(codEmprestimo, l2, d1, p1);
+        codEmprestimo++;
 
-
-        //Bancos.bancoEmprestimos.add(emp1);
-        //Bancos.bancoEmprestimos.add(emp2);
+        Bancos.bancoEmprestimos.add(emp1);
+        Bancos.bancoEmprestimos.add(emp2);
 
 
         int opcao;
         do {
-
             System.out.println("1 - Cadastrar Livro");
             System.out.println("2 - Deletar Livro");
             System.out.println("3 - Reservar Livro");
@@ -104,18 +105,24 @@ public class Main {
                     System.out.println("Insira o Ano");
                     ano = sc.nextInt();
                     LocalDate d = LocalDate.of(ano, mes, dia);
-                    System.out.println("Insira o Código do Livr0: ");
+                    System.out.println("Insira o Código do Livro: ");
                     int cod = sc.nextInt();
-                    acervo.cadastrarReserva(d, cod);
+                    sc.nextLine();
+                    System.out.println("Nome: ");
+                    String nm = sc.nextLine();
+                    Pessoa pessoa = new Pessoa(nm);
+                    acervo.cadastrarReserva(d, cod, pessoa);
                     break;
                 case 4:
                     System.out.println("Insira o Cod. do Livro ");
-                    Bancos.bancoEmprestimos.add(acervo.cadastrarEmprestimo(sc.nextInt(),codEmprestimo));
+                    int cdLivro = sc.nextInt();
+                    acervo.cadastrarEmprestimo(cdLivro,codEmprestimo);
                     codEmprestimo++;
                     break;
                 case 5:
-                    System.out.println("Listar Acervo: ");
-
+                    System.out.println("Devolver Livro: ");
+                    System.out.println("Insira o Cod. do Empréstimo: ");
+                    acervo.devolverEmprestimo(sc.nextInt());
                     break;
                 case 6:
                     System.out.println("Listar Acervo de Livros: ");
@@ -123,7 +130,7 @@ public class Main {
                     break;
                 case 7:
                     System.out.println("Listar Emprestimos: ");
-                    Acervo.imprimirListaEmprestimos(Bancos.bancoEmprestimos);
+                    Acervo.imprimirListaEmprestimos();
                     break;
                 case 8:
                     System.out.println("Lista de Reservas: ");
@@ -131,7 +138,7 @@ public class Main {
                     break;
                 case 9:
                    //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
-                    acervo.dataEntrePeriodo(d1,d2,between);
+                    acervo.apagarReservasAntigas();
                     break;
                 default:
                     System.out.println("Opção Inválida");
