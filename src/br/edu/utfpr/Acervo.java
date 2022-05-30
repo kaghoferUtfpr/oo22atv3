@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Scanner;
-
 public class Acervo {
 
     Scanner sc = new Scanner(System.in);
@@ -20,12 +19,12 @@ public class Acervo {
         if (lista.size() < 1) {
             System.out.println("Lista Vazia!");
         }
-        lista.forEach(l -> System.out.printf("Cod: %d\tData Res: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s \t Para: %s\n",
+        lista.forEach(l -> System.out.printf("Cod: %d\tData Res: %d/%d/%d\t Data Fin: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s \t Para: %s\n",
                 l.getLivro().getCodigo(), l.getDataReserva().getDayOfMonth(),
-                l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(),
+                l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(), l.getDataPrazoFinal().getDayOfMonth(),
+                l.getDataPrazoFinal().getMonthValue(), l.getDataPrazoFinal().getYear(),
                 l.getLivro().getAutor(), l.getLivro().getTitulo(), l.getPessoa().getNome()));
     }
-
 
     public void addLivroAcervo(int cod) {
         Scanner sc = new Scanner(System.in);
@@ -58,6 +57,7 @@ public class Acervo {
     }
 
     public void cadastrarReserva(LocalDate data, int codLivro, Pessoa pessoa) {
+        apagarReservasAntigas();
         Livro l = encontrarPorCod(codLivro);
         if (l != null && disponibilidadeQtd(codLivro)) {
             Reserva r = new Reserva(l, data, pessoa);
@@ -108,7 +108,8 @@ public class Acervo {
         return false;
     }
 
-    public static void imprimirListaEmprestimos(List<Emprestimo> lista) {
+    public static void imprimirListaEmprestimos() {
+        List<Emprestimo> lista = Bancos.bancoEmprestimos;
         if (lista.isEmpty()) {
             System.out.println("Lista Vazia!");
         }else{
@@ -123,9 +124,28 @@ public class Acervo {
         }
     }
 
+    public void apagarReservasAntigas()
+    {
+        for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
+            if (Bancos.bancoReservas.get(i).getDataPrazoFinal().isBefore(LocalDate.now())){
+                Bancos.bancoReservas.remove(i);
+            }
+        }
+    }
+
+    public void apagarReserva(String nome){
+        for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
+            if (Bancos.bancoReservas.get(i).getPessoa().getNome().equals(nome)){
+                Bancos.bancoReservas.remove(i);
+            }
+        }
+    }
+
     public Emprestimo cadastrarEmprestimo(int codLivro, int codEmprestimo) {
+        apagarReservasAntigas();
         System.out.println("Insira nome da pessoa: ");
         Pessoa p = new Pessoa(sc.nextLine());
+        apagarReserva(p.getNome());
         if (checarReserva(p.getNome(), LocalDate.now(), codLivro)) {
             Emprestimo emp = new Emprestimo();
             if (disponibilidadeQtd(codLivro)) {
@@ -149,7 +169,12 @@ public class Acervo {
         return null;
     }
 
-    public long validarEntrega(LocalDate data) {
+    public void diaParaReservar(int codLivro){
+        long result = Bancos.bancoEmprestimos.stream().filter(e -> e.getLivro().getCodigo() == codLivro).count();
+        System.out.println("Qdt: "+ result);
+    }
+
+    public long qtdDiasEmprestimo(LocalDate data) {
 
         LocalDate d1 = LocalDate.of(data.getYear(), data.getMonthValue(), data.getDayOfMonth());
         LocalDate d2 = LocalDate.now();
@@ -193,5 +218,21 @@ public class Acervo {
         return false;
     }
 
+    public void devolverEmprestimo(int codEmprestimo){
+        for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
+            if(Bancos.bancoEmprestimos.get(i).getCodigo()==codEmprestimo){
+                System.out.println("Dados Devolução: ");
+                System.out.println("Nome: " + Bancos.bancoEmprestimos.get(i).getPessoa().getNome());
+                System.out.printf("Livro: %s\t Autor: %s\n", Bancos.bancoEmprestimos.get(i).getLivro().getTitulo(), Bancos.bancoEmprestimos.get(i).getLivro().getAutor());
+                long dias = qtdDiasEmprestimo(Bancos.bancoEmprestimos.get(i).getDataLocacao());
+                double multa = validarMulta(dias, 0.5, 1.0,20.0);
+                if(multa == 0.0){
+                    System.out.println("Devolução dentro do prazo.");
+                }else {
+                    System.out.printf("Existe um valor à pagar de: R$ %.2f\n", multa);
+                }
+            }
+        }
+    }
 
 }

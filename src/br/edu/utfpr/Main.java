@@ -127,7 +127,7 @@ public class Main {
                     break;
                 case 7:
                     System.out.println("Listar Emprestimos: ");
-                    Acervo.imprimirListaEmprestimos(Bancos.bancoEmprestimos);
+                    Acervo.imprimirListaEmprestimos();
                     break;
                 case 8:
                     System.out.println("Lista de Reservas: ");
@@ -135,7 +135,7 @@ public class Main {
                     break;
                 case 9:
                    //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
-                    acervo.dataEntrePeriodo(d1,d2,between);
+                    acervo.apagarReservasAntigas();
                     break;
                 default:
                     System.out.println("Opção Inválida");
