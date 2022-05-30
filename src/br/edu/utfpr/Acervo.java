@@ -61,12 +61,12 @@ public class Acervo {
         apagarReservasAntigas();
         Livro l = encontrarPorCod(codLivro);
         long qtd = Bancos.bancoReservas.stream().filter(lv -> lv.getLivro().getCodigo() == codLivro).count();
-        if(qtd < l.getEstoque()) {
+        if (qtd < l.getEstoque()) {
             if (l != null && disponibilidadeQtd(codLivro)) {
                 Reserva r = new Reserva(l, data, pessoa);
                 Bancos.bancoReservas.add(r);
             }
-        }else{
+        } else {
             System.out.println("Reserva não pode ser feita, qtd indisponivel para a data");
         }
     }
@@ -149,7 +149,6 @@ public class Acervo {
     }
 
 
-
     public void apagarReserva(String nome) {
         for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
             if (Bancos.bancoReservas.get(i).getPessoa().getNome().equals(nome)) {
@@ -159,7 +158,7 @@ public class Acervo {
     }
 
     public void cadastrarEmprestimo(int codLivro, int codEmprestimo) {
-        //apagarReservasAntigas();
+        apagarReservasAntigas();
         System.out.println("Insira nome da pessoa: ");
         Pessoa p = new Pessoa(sc.nextLine());
         apagarReserva(p.getNome());
@@ -180,11 +179,6 @@ public class Acervo {
         }
     }
 
-    public void diaParaReservar(int codLivro) {
-        long result = Bancos.bancoEmprestimos.stream().filter(e -> e.getLivro().getCodigo() == codLivro).count();
-        System.out.println("Qdt: " + result);
-    }
-
     public long qtdDiasEmprestimo(LocalDate data) {
 
         LocalDate d1 = LocalDate.of(data.getYear(), data.getMonthValue(), data.getDayOfMonth());
@@ -197,9 +191,7 @@ public class Acervo {
     public Double validarMulta(long dias, Double multaDiaria, Double multaAcimaLimite, Double multaLimite) {
         Double valorMulta = dias * multaDiaria;
         Double diasComMultaPadrao, diasComMultaAux, totalMulta;
-
         int multaExtra = 0;
-
         if (dias > 15) {
             if (valorMulta > multaLimite) {
                 diasComMultaAux = (valorMulta - multaLimite) / multaDiaria;
@@ -208,25 +200,23 @@ public class Acervo {
                 return totalMulta;
             } else {
                 return valorMulta;
-                //teste
             }
         }
         return 0.0;
     }
 
     public boolean checarReserva(String nome, LocalDate data, int codLivro) {
-
-            for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
-                if (Bancos.bancoReservas.get(i).getLivro().getCodigo() == codLivro) {
-                    if (nome == Bancos.bancoReservas.get(i).getPessoa().getNome()) {
-                        return true;
-                    } else if (data.isAfter(Bancos.bancoReservas.get(i).getDataPrazoFinal())) {
-                        return true;
-                    } else if (encontrarPorCod(codLivro).getQtdDisponivel() > 0) {
-                        return true;
-                    }
+        for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
+            if (Bancos.bancoReservas.get(i).getLivro().getCodigo() == codLivro) {
+                if (nome == Bancos.bancoReservas.get(i).getPessoa().getNome()) {
+                    return true;
+                } else if (data.isAfter(Bancos.bancoReservas.get(i).getDataPrazoFinal())) {
+                    return true;
+                } else if (encontrarPorCod(codLivro).getQtdDisponivel() > 0) {
+                    return true;
                 }
             }
+        }
         return false;
     }
 
@@ -249,7 +239,7 @@ public class Acervo {
         }
     }
 
-    public void testando(){
+    public void testando() {
         Bancos.bancoEmprestimos.stream().forEach(e -> e.getLivro().getCodigo());
     }
 
