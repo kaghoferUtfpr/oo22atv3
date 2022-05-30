@@ -135,12 +135,15 @@ public class Acervo {
     }
 
     public void apagarEmprestimo(int codEmprestimo) {
-        for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
-            if (Bancos.bancoEmprestimos.get(i).getCodigo() == codEmprestimo) {
-                Bancos.bancoEmprestimos.remove(i);
-            }
-        }
+//        for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
+//            if (Bancos.bancoEmprestimos.get(i).getCodigo() == codEmprestimo) {
+//                Bancos.bancoEmprestimos.remove(i);
+//            }
+//        }
+        Bancos.bancoEmprestimos.removeIf(e -> e.getCodigo() == codEmprestimo);
     }
+
+
 
     public void apagarReserva(String nome) {
         for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
@@ -238,6 +241,10 @@ public class Acervo {
                 }
             }
         }
+    }
+
+    public void testando(){
+        Bancos.bancoEmprestimos.stream().forEach(e -> e.getLivro().getCodigo());
     }
 
 }

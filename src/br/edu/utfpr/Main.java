@@ -138,7 +138,8 @@ public class Main {
                     break;
                 case 9:
                    //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
-                    acervo.apagarReservasAntigas();
+                    //acervo.apagarReservasAntigas();
+                    acervo.testando();
                     break;
                 default:
                     System.out.println("Opção Inválida");
