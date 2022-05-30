@@ -2,6 +2,7 @@ package br.edu.utfpr;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,11 +21,7 @@ public class Acervo {
         if (lista.size() < 1) {
             System.out.println("Lista Vazia!");
         }
-        lista.forEach(l -> System.out.printf("Cod: %d\tData Res: %d/%d/%d\t Data Fin: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s \t Para: %s\n",
-                l.getLivro().getCodigo(), l.getDataReserva().getDayOfMonth(),
-                l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(), l.getDataPrazoFinal().getDayOfMonth(),
-                l.getDataPrazoFinal().getMonthValue(), l.getDataPrazoFinal().getYear(),
-                l.getLivro().getAutor(), l.getLivro().getTitulo(), l.getPessoa().getNome()));
+        lista.forEach(l -> System.out.printf("Cod Livro: %d\tData Res: %d/%d/%d\t Data Fin: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s \t Para: %s\n", l.getLivro().getCodigo(), l.getDataReserva().getDayOfMonth(), l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(), l.getDataPrazoFinal().getDayOfMonth(), l.getDataPrazoFinal().getMonthValue(), l.getDataPrazoFinal().getYear(), l.getLivro().getAutor(), l.getLivro().getTitulo(), l.getPessoa().getNome()));
     }
 
     public void addLivroAcervo(int cod) {
@@ -57,8 +54,19 @@ public class Acervo {
         Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel() + 1));
     }
 
-    public void cadastrarReserva(LocalDate data, int codLivro, Pessoa pessoa) {
+    public void cadastrarReserva(LocalDate data, Pessoa pessoa) {
         apagarReservasAntigas();
+        System.out.println("Insira o código do Livro: ");
+        int codLivro = sc.nextInt();
+        List<Emprestimo> lista = new ArrayList<>();
+        for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
+            if(Bancos.bancoEmprestimos.get(i).getLivro().getCodigo() == codLivro){
+                System.out.println();
+                lista.add(Bancos.bancoEmprestimos.get(i));
+            }
+        }
+        do{
+        }while (data != null);
         Livro l = encontrarPorCod(codLivro);
         long qtd = Bancos.bancoReservas.stream().filter(lv -> lv.getLivro().getCodigo() == codLivro).count();
         if (qtd < l.getEstoque()) {
@@ -68,6 +76,11 @@ public class Acervo {
             }
         } else {
             System.out.println("Reserva não pode ser feita, qtd indisponivel para a data");
+            Bancos.bancoEmprestimos.stream().forEach(livro -> {
+                if(livro.getLivro().getCodigo() == codLivro){
+                System.out.printf("Retorno em: %d/%d/%d\n", livro.getDataDevolucao().getDayOfMonth(), livro.getDataDevolucao().getMonthValue(), livro.getDataDevolucao().getYear());
+            }
+            });
         }
     }
 
@@ -158,7 +171,7 @@ public class Acervo {
     }
 
     public void cadastrarEmprestimo(int codLivro, int codEmprestimo) {
-        apagarReservasAntigas();
+        //apagarReservasAntigas();
         System.out.println("Insira nome da pessoa: ");
         Pessoa p = new Pessoa(sc.nextLine());
         apagarReserva(p.getNome());
@@ -179,6 +192,11 @@ public class Acervo {
         }
     }
 
+    public void diaParaReservar(int codLivro) {
+        long result = Bancos.bancoEmprestimos.stream().filter(e -> e.getLivro().getCodigo() == codLivro).count();
+        System.out.println("Qdt: " + result);
+    }
+
     public long qtdDiasEmprestimo(LocalDate data) {
 
         LocalDate d1 = LocalDate.of(data.getYear(), data.getMonthValue(), data.getDayOfMonth());
@@ -191,7 +209,9 @@ public class Acervo {
     public Double validarMulta(long dias, Double multaDiaria, Double multaAcimaLimite, Double multaLimite) {
         Double valorMulta = dias * multaDiaria;
         Double diasComMultaPadrao, diasComMultaAux, totalMulta;
+
         int multaExtra = 0;
+
         if (dias > 15) {
             if (valorMulta > multaLimite) {
                 diasComMultaAux = (valorMulta - multaLimite) / multaDiaria;
@@ -200,12 +220,14 @@ public class Acervo {
                 return totalMulta;
             } else {
                 return valorMulta;
+                //teste
             }
         }
         return 0.0;
     }
 
     public boolean checarReserva(String nome, LocalDate data, int codLivro) {
+
         for (int i = 0; i < Bancos.bancoReservas.size(); i++) {
             if (Bancos.bancoReservas.get(i).getLivro().getCodigo() == codLivro) {
                 if (nome == Bancos.bancoReservas.get(i).getPessoa().getNome()) {
