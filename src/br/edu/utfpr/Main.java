@@ -40,7 +40,6 @@ public class Main {
         codLivro++;
 
         List<Livro> listaLivros = new ArrayList<>();
-        ReservaController reservaController = new ReservaController();
 
         Bancos.bancoLivros.add(l1);
         Bancos.bancoLivros.add(l2);
@@ -51,23 +50,20 @@ public class Main {
 
         Acervo acervo = new Acervo();
 
-        List<Emprestimo> listaEmprestimos = new ArrayList<>();
-
         LocalDate d1 = LocalDate.of(2022,5,5);
         LocalDate between = LocalDate.of(2022,5,10);
         LocalDate d2 = LocalDate.now();
 
-
-
         Pessoa p1 = new Pessoa("Daniel");
 
-        Emprestimo emp1 = new Emprestimo(codEmprestimo, l1, d1, p1);
-        codEmprestimo++;
-        Emprestimo emp2 = new Emprestimo(codEmprestimo, l2, d1, p1);
-        codEmprestimo++;
+        //Emprestimo emp1 = new Emprestimo(codEmprestimo, l1, d1, p1);
+        //codEmprestimo++;
+        //acervo.decrementarQtd(1);
+//        Emprestimo emp2 = new Emprestimo(codEmprestimo, l2, d1, p1);
+//        codEmprestimo++;
 
-        Bancos.bancoEmprestimos.add(emp1);
-        Bancos.bancoEmprestimos.add(emp2);
+        //Bancos.bancoEmprestimos.add(emp1);
+        //Bancos.bancoEmprestimos.add(emp2);
 
 
         int opcao;
@@ -96,24 +92,12 @@ public class Main {
                     acervo.removerLivro(sc.nextInt(), listaLivros);
                     break;
                 case 3:
-                    int dia, mes, ano;
-                    System.out.println("Cadastrar reserva: ");
-                    System.out.println("Insira o Dia");
-                    dia = sc.nextInt();
-                    System.out.println("Insira o Mês");
-                    mes = sc.nextInt();
-                    System.out.println("Insira o Ano");
-                    ano = sc.nextInt();
-                    LocalDate d = LocalDate.of(ano, mes, dia);
-                    sc.nextLine();
-                    System.out.println("Nome: ");
-                    String nm = sc.nextLine();
-                    Pessoa pessoa = new Pessoa(nm);
-                    acervo.cadastrarReserva(d, pessoa);
+                    acervo.cadastrarReserva();
                     break;
                 case 4:
                     System.out.println("Insira o Cod. do Livro ");
                     int cdLivro = sc.nextInt();
+                    sc.nextLine();
                     acervo.cadastrarEmprestimo(cdLivro,codEmprestimo);
                     codEmprestimo++;
                     break;
