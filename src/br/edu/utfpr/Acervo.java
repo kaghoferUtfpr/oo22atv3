@@ -2,9 +2,7 @@ package br.edu.utfpr;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Acervo {
 
@@ -59,28 +57,37 @@ public class Acervo {
     public void cadastrarReserva() {
         System.out.println("Digite código de um livro: ");
         int codLivro = sc.nextInt();
+        sc.nextLine();
         Livro li = Bancos.bancoLivros.stream().filter(f -> f.getCodigo() == codLivro).findFirst().get();
         int qtdDisp = li.getQtdDisponivel();
-        if (qtdDisp > 0) {
-            System.out.println("Não é possivel reservar, livro está disponivel no momento.");
+        long contReservas = Bancos.bancoReservas.stream().filter(f -> f.getLivro().getCodigo() == codLivro).count();
+        if (contReservas == li.getEstoque()) {
+            System.out.println("Reservas suspensas para esse livro, atingido limite de reservas!");
         } else {
-            Bancos.bancoEmprestimos.stream().filter(l -> l.getLivro().getCodigo() == codLivro).forEach(livro -> {
-                System.out.printf("->Disponível em: %d/%d/%d\n", livro.getDataDevolucao().getDayOfMonth(), livro.getDataDevolucao().getMonthValue(), livro.getDataDevolucao().getYear());
-            });
-            System.out.println("Escolha uma das Datas");
-            List<LocalDate> datas = Bancos.bancoEmprestimos.stream().filter(f -> f.getLivro().getCodigo() == codLivro).map(m -> m.getDataDevolucao()).toList();
-            int opc;
-            LocalDate dataRes;
-            do {
-                System.out.println("Opções de data de reserva: ");
-                for (int i = 0; i < datas.size(); i++) {
-                    System.out.printf("Digite: >> %d para: %d/%d/%d", i + 1, datas.get(i).getDayOfMonth(), datas.get(i).getMonthValue(), datas.get(i).getYear());
-                }
-                opc = sc.nextInt();
+            if (qtdDisp > 0) {
+                System.out.println("Não é possivel reservar, livro está disponivel no momento.");
+            } else {
+                System.out.println("Escolha uma das Datas");
+                List<LocalDate> datas = Bancos.bancoEmprestimos.stream().filter(f -> f.getLivro().getCodigo() == codLivro && f.isStatus()).map(m -> m.getDataDevolucao()).toList();
+                int opc;
+                LocalDate dataRes;
+                do {
+                    System.out.println("Opções de data de reserva: ");
+                    for (int i = 0; i < datas.size(); i++) {
+                        System.out.printf("Digite: >> %d para: %d/%d/%d\n", i + 1, datas.get(i).getDayOfMonth(), datas.get(i).getMonthValue(), datas.get(i).getYear());
+                    }
+                    opc = sc.nextInt();
+                    sc.nextLine();
+                } while (opc < 1 || opc > datas.size());
                 dataRes = datas.get(opc - 1);
-            } while (opc < 1 && opc > datas.size() + 1);
-
+                System.out.println("Digite o nome: ");
+                Pessoa p = new Pessoa(sc.nextLine());
+                Reserva res = new Reserva(li, dataRes, p);
+                Bancos.bancoEmprestimos.stream().filter(fil -> fil.getLivro().getCodigo() == codLivro && fil.getDataDevolucao().isEqual(dataRes)).findFirst().get().setStatus(false);
+                Bancos.bancoReservas.add(res);
+            }
         }
+
     }
 
     public Pessoa coletarDadosPessoa() {
@@ -139,7 +146,6 @@ public class Acervo {
         if (Bancos.bancoEmprestimos.isEmpty()) {
             System.out.println("Lista Vazia!");
         } else {
-
             for (int i = 0; i < lista.size(); i++) {
                 System.out.println("COD EMPRÉSTIMO: " + lista.get(i).getCodigo());
                 System.out.println("Nome = " + lista.get(i).getPessoa().getNome());
@@ -177,7 +183,6 @@ public class Acervo {
 
     public void cadastrarEmprestimo(int codLivro, int codEmprestimo) {
         apagarReservasAntigas();
-
         if (disponibilidadeQtd(codLivro)) {
             System.out.println("Insira nome da pessoa: ");
             String nome = sc.nextLine();

@@ -12,6 +12,8 @@ public class Emprestimo {
     private LocalDate dataDevolucao;
     private Pessoa pessoa;
 
+    private boolean status;
+
     public int getCodigo() {
         return codigo;
     }
@@ -55,12 +57,21 @@ public class Emprestimo {
     public Emprestimo() {
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public Emprestimo(int codigo, Livro livro, LocalDate dataLocacao, Pessoa p) {
         this.codigo = codigo;
         this.livro = livro;
         this.dataLocacao = dataLocacao;
         this.dataDevolucao = dataLocacao.plusDays(15);
         this.pessoa = p;
+        this.status = true;
     }
 
 

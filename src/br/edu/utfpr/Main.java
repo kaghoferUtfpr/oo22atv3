@@ -50,24 +50,26 @@ public class Main {
 
         Acervo acervo = new Acervo();
 
-        LocalDate d1 = LocalDate.of(2022,5,5);
-        LocalDate between = LocalDate.of(2022,5,10);
-        LocalDate d2 = LocalDate.now();
+        LocalDate d1 = LocalDate.of(2022, 5, 27);
+        //LocalDate between = LocalDate.of(2022, 5, 10);
+        LocalDate d2 = LocalDate.of(2022, 5, 25);
 
         Pessoa p1 = new Pessoa("Daniel");
 
-        //Emprestimo emp1 = new Emprestimo(codEmprestimo, l1, d1, p1);
-        //codEmprestimo++;
-        //acervo.decrementarQtd(1);
-//        Emprestimo emp2 = new Emprestimo(codEmprestimo, l2, d1, p1);
-//        codEmprestimo++;
+        Emprestimo emp1 = new Emprestimo(codEmprestimo, l1, d1, p1);
+        codEmprestimo++;
+        acervo.decrementarQtd(1);
+        Emprestimo emp2 = new Emprestimo(codEmprestimo, l1, d2, p1);
+        codEmprestimo++;
+        acervo.decrementarQtd(1);
 
-        //Bancos.bancoEmprestimos.add(emp1);
-        //Bancos.bancoEmprestimos.add(emp2);
+        Bancos.bancoEmprestimos.add(emp1);
+        Bancos.bancoEmprestimos.add(emp2);
 
 
         int opcao;
         do {
+            acervo.apagarReservasAntigas();
             System.out.println("1 - Cadastrar Livro");
             System.out.println("2 - Deletar Livro");
             System.out.println("3 - Reservar Livro");
@@ -98,7 +100,7 @@ public class Main {
                     System.out.println("Insira o Cod. do Livro ");
                     int cdLivro = sc.nextInt();
                     sc.nextLine();
-                    acervo.cadastrarEmprestimo(cdLivro,codEmprestimo);
+                    acervo.cadastrarEmprestimo(cdLivro, codEmprestimo);
                     codEmprestimo++;
                     break;
                 case 5:
@@ -119,7 +121,7 @@ public class Main {
                     acervo.listarReservas(Bancos.bancoReservas);
                     break;
                 case 9:
-                   //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
+                    //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
                     //acervo.apagarReservasAntigas();
                     acervo.testando();
                     break;
