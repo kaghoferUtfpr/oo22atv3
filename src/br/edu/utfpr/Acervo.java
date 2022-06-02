@@ -56,55 +56,34 @@ public class Acervo {
         Bancos.bancoLivros.stream().filter(l -> l.getCodigo() == cod).forEach(l -> l.setQtdDisponivel(l.getQtdDisponivel() + 1));
     }
 
-//    public void cadastrarReserva(LocalDate data, Pessoa pessoa) {
-//        apagarReservasAntigas();
-//        System.out.println("Insira o código do Livro: ");
-//        int codLivro = sc.nextInt();
-//        List<Emprestimo> lista = new ArrayList<>();
-//        for (int i = 0; i < Bancos.bancoEmprestimos.size(); i++) {
-//            if (Bancos.bancoEmprestimos.get(i).getLivro().getCodigo() == codLivro) {
-//                System.out.println();
-//                lista.add(Bancos.bancoEmprestimos.get(i));
-//            }
-//        }
-//        do {
-//        } while (data != null);
-//        Livro l = encontrarPorCod(codLivro);
-//        long qtd = Bancos.bancoReservas.stream().filter(lv -> lv.getLivro().getCodigo() == codLivro).count();
-//        if (qtd < l.getEstoque()) {
-//            if (l != null && disponibilidadeQtd(codLivro)) {
-//                Reserva r = new Reserva(l, data, pessoa);
-//                Bancos.bancoReservas.add(r);
-//            }
-//        } else {
-//            System.out.println("Reserva não pode ser feita, qtd indisponivel para a data");
-//            Bancos.bancoEmprestimos.stream().forEach(livro -> {
-//                if (livro.getLivro().getCodigo() == codLivro) {
-//                    System.out.printf("Retorno em: %d/%d/%d\n", livro.getDataDevolucao().getDayOfMonth(), livro.getDataDevolucao().getMonthValue(), livro.getDataDevolucao().getYear());
-//                }
-//            });
-//        }
-//    }
-
-
-    public void cadastrarReserva(){
+    public void cadastrarReserva() {
         System.out.println("Digite código de um livro: ");
         int codLivro = sc.nextInt();
-        Livro li = Bancos.bancoLivros.stream().filter(f -> f.getCodigo()==codLivro).findFirst().get();
+        Livro li = Bancos.bancoLivros.stream().filter(f -> f.getCodigo() == codLivro).findFirst().get();
         int qtdDisp = li.getQtdDisponivel();
-        if(qtdDisp>0){
+        if (qtdDisp > 0) {
             System.out.println("Não é possivel reservar, livro está disponivel no momento.");
-        }else {
-            Bancos.bancoEmprestimos.stream().filter(l -> l.getLivro().getCodigo()==codLivro).forEach(livro -> {
+        } else {
+            Bancos.bancoEmprestimos.stream().filter(l -> l.getLivro().getCodigo() == codLivro).forEach(livro -> {
                 System.out.printf("->Disponível em: %d/%d/%d\n", livro.getDataDevolucao().getDayOfMonth(), livro.getDataDevolucao().getMonthValue(), livro.getDataDevolucao().getYear());
             });
             System.out.println("Escolha uma das Datas");
+            List<LocalDate> datas = Bancos.bancoEmprestimos.stream().filter(f -> f.getLivro().getCodigo() == codLivro).map(m -> m.getDataDevolucao()).toList();
+            int opc;
+            LocalDate dataRes;
+            do {
+                System.out.println("Opções de data de reserva: ");
+                for (int i = 0; i < datas.size(); i++) {
+                    System.out.printf("Digite: >> %d para: %d/%d/%d", i + 1, datas.get(i).getDayOfMonth(), datas.get(i).getMonthValue(), datas.get(i).getYear());
+                }
+                opc = sc.nextInt();
+                dataRes = datas.get(opc - 1);
+            } while (opc < 1 && opc > datas.size() + 1);
 
         }
     }
 
-    public Pessoa coletarDadosPessoa()
-    {
+    public Pessoa coletarDadosPessoa() {
         String nome;
         System.out.println("Digite o nome:");
         nome = sc.nextLine();
@@ -181,7 +160,7 @@ public class Acervo {
     }
 
     public void apagarEmprestimo(int codEmprestimo) {
-        Livro livro = Bancos.bancoEmprestimos.stream().filter(l -> l.getCodigo()==codEmprestimo).findFirst().get().getLivro();
+        Livro livro = Bancos.bancoEmprestimos.stream().filter(l -> l.getCodigo() == codEmprestimo).findFirst().get().getLivro();
         int codLivro = livro.getCodigo();
         acrescentarQtd(codLivro);
         Bancos.bancoEmprestimos.removeIf(e -> e.getCodigo() == codEmprestimo);
