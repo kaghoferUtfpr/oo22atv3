@@ -37,10 +37,12 @@ public class LivroService implements CrudService<Livro>{
 
     public void listarAcervo(List<Livro> livros) {
         System.out.printf("\n\n");
-        if (livros.size() < 1) {
+        if (livros.size() == 0) {
             System.out.println("Lista Vazia!");
+        }else{
+            BancoDados.bancoLivros.stream().forEach(l -> System.out.printf("Cod: %d\tQtd%d\t Autor: %s" + "\t" + "Livro: %s\n", l.getCodigo(), l.getQtdDisponivel(), l.getAutor(), l.getTitulo()));
+            System.out.printf("\n\n");
         }
-        livros.forEach(l -> System.out.printf("Cod: %d\tQtd%d\t Autor: %s" + "\t" + "Livro: %s\n", l.getCodigo(), l.getQtdDisponivel(), l.getAutor(), l.getTitulo()));
-        System.out.printf("\n\n");
     }
+
 }
