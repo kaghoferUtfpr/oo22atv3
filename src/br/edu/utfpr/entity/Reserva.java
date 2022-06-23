@@ -11,11 +11,12 @@ public class Reserva extends Entity{
     private LocalDate dataPrazoFinal;
     private boolean statusDispReserva;
 
-    public Reserva(Livro livro, LocalDate dataReserva, Pessoa pessoa) {
+    public Reserva(Livro livro, LocalDate dataReserva, Pessoa pessoa, Long codigo) {
         this.livro = livro;
         this.dataReserva = dataReserva;
         this.dataPrazoFinal = dataReserva.plusDays(2);
         this.pessoa = pessoa;
+        this.codigo = codigo;
     }
 
     public boolean isStatusDispReserva() {

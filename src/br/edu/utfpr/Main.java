@@ -18,6 +18,7 @@ import br.edu.utfpr.config.BancoDados;
 import br.edu.utfpr.entity.Emprestimo;
 import br.edu.utfpr.entity.Livro;
 import br.edu.utfpr.entity.Pessoa;
+import br.edu.utfpr.entity.Reserva;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -36,7 +37,7 @@ public class Main {
 
         EmprestimoService emprestimoService = new EmprestimoService();
         LivroService livroService = new LivroService();
-        ReservaService reservaService =new ReservaService();
+        ReservaService reservaService = new ReservaService();
 
         Livro l1 = new Livro("Erik Brynjolfsson e Andrew Mcafee", "A Segunda Era das Máquinas", 2, codLivro);
         codLivro++;
@@ -51,16 +52,12 @@ public class Main {
         Livro l6 = new Livro("Ernesto Mario Haberkorn", "Teste", 1, codLivro);
         codLivro++;
 
-        List<Livro> listaLivros = new ArrayList<>();
-
         BancoDados.bancoLivros.add(l1);
         BancoDados.bancoLivros.add(l2);
         BancoDados.bancoLivros.add(l3);
         BancoDados.bancoLivros.add(l4);
         BancoDados.bancoLivros.add(l5);
         BancoDados.bancoLivros.add(l6);
-
-        Acervo acervo = new Acervo();
 
         LocalDate d1 = LocalDate.of(2022, 5, 27);
         //LocalDate between = LocalDate.of(2022, 5, 10);
@@ -77,6 +74,11 @@ public class Main {
 
         BancoDados.bancoEmprestimos.add(emp1);
         BancoDados.bancoEmprestimos.add(emp2);
+
+        Reserva res2 = new Reserva(l1, d2, p1, codReserva);
+        codReserva++;
+
+        BancoDados.bancoReservas.add(res2);
 
 
         int opcao;
@@ -106,7 +108,8 @@ public class Main {
                     livroService.remover(sc.nextLong());
                     break;
                 case 3:
-                    reservaService.cadastrarReserva();
+                    reservaService.cadastrarReserva(1L);
+                    codReserva++;
                     break;
                 case 4:
                     System.out.println("Insira o Cod. do Livro ");
@@ -130,7 +133,7 @@ public class Main {
                     break;
                 case 8:
                     System.out.println("Lista de Reservas: ");
-                    reservaService.listarReservas(BancoDados.bancoReservas);
+                    reservaService.listarReservas();
                     break;
                 case 9:
                     //System.out.println(acervo.disponibilidadadeStatutus("joao", 1));

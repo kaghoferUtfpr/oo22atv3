@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class EmprestimoService implements CrudService<Emprestimo>{
+
+    ReservaService reservaService = new ReservaService();
     @Override
     public void salvar(Emprestimo object) {
     }
@@ -98,8 +100,8 @@ public class EmprestimoService implements CrudService<Emprestimo>{
         Pessoa p = new Pessoa(nome);
         if (disponibilidadeQtd(codLivro) && disponibilidadadeStatutus(nome, codLivro)) {
 
-            ReservaService res = new ReservaService();
-            res.removerPorNome(p.getNome());
+
+            reservaService.removerPorNome(p.getNome());
             Emprestimo emp = new Emprestimo();
             emp.setPessoa(p);
             LivroService livroService = new LivroService();
@@ -118,7 +120,9 @@ public class EmprestimoService implements CrudService<Emprestimo>{
 
     public boolean disponibilidadadeStatutus(String nome, Long codLivro){
 
-        Reserva reserva = BancoDados.bancoReservas.stream().filter(f -> f.getLivro().getCodigo()==codLivro && f.getPessoa().getNome().equals(nome)).findFirst().orElse(null);
+        Reserva reserva = BancoDados.bancoReservas.stream()
+                .filter(f -> f.getLivro().getCodigo()==codLivro && f.getPessoa().getNome().equals(nome))
+                .findFirst().orElse(null);
         if(reserva==null){
             return false;
         }

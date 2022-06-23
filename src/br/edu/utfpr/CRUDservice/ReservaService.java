@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class ReservaService implements CrudService<Reserva> {
     @Override
-    public void salvar(Reserva object) {
-
+    public void salvar(Reserva reserva) {
+        BancoDados.bancoReservas.add(reserva);
     }
 
     @Override
@@ -36,17 +36,22 @@ public class ReservaService implements CrudService<Reserva> {
         }
     }
 
-    public void listarReservas(List<Reserva> lista) {
-        if (lista.size() < 1) {
-            System.out.println("Lista Vazia!");
-        }
-        lista.forEach(l -> System.out.printf("Cod Livro: %d\tData Res: %d/%d/%d\t Data Fin: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s \t Para: %s\n", l.getLivro().getCodigo(), l.getDataReserva().getDayOfMonth(), l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(), l.getDataPrazoFinal().getDayOfMonth(), l.getDataPrazoFinal().getMonthValue(), l.getDataPrazoFinal().getYear(), l.getLivro().getAutor(), l.getLivro().getTitulo(), l.getPessoa().getNome()));
+    public void listarReservas() {
+//        System.out.println(BancoDados.bancoReservas.size());
+//        if (BancoDados.bancoReservas.size() > 0) {
+//            System.out.println("Lista Vazia!");
+//        }else {
+            //BancoDados.bancoReservas.stream().forEach(l -> System.out.printf("Cod Livro: %d\tData Res: %d/%d/%d\t Data Fin: %d/%d/%d\t Autor: %s" + "\t" + "Livro: %s \t Para: %s\n", l.getLivro().getCodigo(), l.getDataReserva().getDayOfMonth(), l.getDataReserva().getMonthValue(), l.getDataReserva().getYear(), l.getDataPrazoFinal().getDayOfMonth(), l.getDataPrazoFinal().getMonthValue(), l.getDataPrazoFinal().getYear(), l.getLivro().getAutor(), l.getLivro().getTitulo(), l.getPessoa().getNome()));
+
+//        }
+        System.out.println(BancoDados.bancoReservas.size());
+        BancoDados.bancoReservas.stream().forEach(l -> System.out.println(l.getPessoa()));
     }
 
-    public void cadastrarReserva() {
+    public void cadastrarReserva(Long codigo) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite código de um livro: ");
-        int codLivro = sc.nextInt();
+        Long codLivro = sc.nextLong();
         sc.nextLine();
         Livro li = BancoDados.bancoLivros.stream().filter(f -> f.getCodigo() == codLivro).findFirst().get();
         int qtdDisp = li.getQtdDisponivel();
@@ -72,12 +77,11 @@ public class ReservaService implements CrudService<Reserva> {
                 dataRes = datas.get(opc - 1);
                 System.out.println("Digite o nome: ");
                 Pessoa p = new Pessoa(sc.nextLine());
-                Reserva res = new Reserva(li, dataRes, p);
+                Reserva res = new Reserva(li, dataRes, p, codigo);
                 BancoDados.bancoEmprestimos.stream().filter(fil -> fil.getLivro().getCodigo() == codLivro && fil.getDataDevolucao().isEqual(dataRes)).findFirst().get().setStatus(false);
-                BancoDados.bancoReservas.add(res);
+                salvar(res);
             }
         }
-
     }
 
 }
