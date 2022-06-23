@@ -1,12 +1,14 @@
-package br.edu.utfpr;
+package br.edu.utfpr.entity;
+
+import br.edu.utfpr.entity.Livro;
+import br.edu.utfpr.entity.Pessoa;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
-public class Emprestimo {
+public class Emprestimo extends Entity{
 
 
-    private int codigo;
+    private Long codigo;
     private Livro livro;
     private LocalDate dataLocacao;
     private LocalDate dataDevolucao;
@@ -14,11 +16,11 @@ public class Emprestimo {
 
     private boolean status;
 
-    public int getCodigo() {
+    public Long getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(Long codigo) {
         this.codigo = codigo;
     }
 
@@ -65,7 +67,7 @@ public class Emprestimo {
         this.status = status;
     }
 
-    public Emprestimo(int codigo, Livro livro, LocalDate dataLocacao, Pessoa p) {
+    public Emprestimo(Long codigo, Livro livro, LocalDate dataLocacao, Pessoa p) {
         this.codigo = codigo;
         this.livro = livro;
         this.dataLocacao = dataLocacao;

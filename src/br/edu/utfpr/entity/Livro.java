@@ -1,14 +1,14 @@
-package br.edu.utfpr;
+package br.edu.utfpr.entity;
 
-public class Livro {
+public class Livro extends Entity{
     private String autor;
     private String titulo;
     private int qtdDisponivel;
 
     private int estoque;
-    private int codigo;
+    private Long codigo;
 
-    public Livro(String autor, String titulo, int qtdDisponivel, int codigo) {
+    public Livro(String autor, String titulo, int qtdDisponivel, Long codigo) {
         this.autor = autor;
         this.titulo = titulo;
         this.qtdDisponivel = qtdDisponivel;
@@ -24,7 +24,6 @@ public class Livro {
         return autor;
     }
 
-
     public String getTitulo() {
         return titulo;
     }
@@ -38,7 +37,7 @@ public class Livro {
         this.qtdDisponivel = qtdDisponivel;
     }
 
-    public int getCodigo() {
+    public Long getCodigo() {
         return codigo;
     }
 

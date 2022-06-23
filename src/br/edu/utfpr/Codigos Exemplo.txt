@@ -1,6 +1,0 @@
-Datas d1 = new Datas(01,01,2022);
-Calendario c = new Calendario();
-long dias = c.validarEntrega(d1);
-System.out.println(c.validarMulta(dias, .5,1.0,20.0));
-
-

@@ -1,6 +1,6 @@
-package br.edu.utfpr;
+package br.edu.utfpr.entity;
 
-public class Pessoa {
+public class Pessoa extends Entity{
     private String nome;
 
     public Pessoa(String nome)

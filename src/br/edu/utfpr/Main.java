@@ -11,7 +11,13 @@ Criar programa orientado à objetos para solucionar os seguintes casos de uso:
 - caso tenha vencido calcular 50 centavos ao dia até 20 reais, depois 1 real por dia
  */
 
-import br.edu.utfpr.Controller.ReservaController;
+import br.edu.utfpr.CRUDservice.EmprestimoService;
+import br.edu.utfpr.CRUDservice.LivroService;
+import br.edu.utfpr.CRUDservice.ReservaService;
+import br.edu.utfpr.config.BancoDados;
+import br.edu.utfpr.entity.Emprestimo;
+import br.edu.utfpr.entity.Livro;
+import br.edu.utfpr.entity.Pessoa;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -20,11 +26,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) throws ParseException {
 
         Scanner sc = new Scanner(System.in);
-        int codLivro = 1;
-        int codEmprestimo = 1;
+        Long codLivro = 1L;
+        Long codEmprestimo = 1L;
+        Long codReserva = 1L;
+
+        EmprestimoService emprestimoService = new EmprestimoService();
+        LivroService livroService = new LivroService();
+        ReservaService reservaService =new ReservaService();
 
         Livro l1 = new Livro("Erik Brynjolfsson e Andrew Mcafee", "A Segunda Era das Máquinas", 2, codLivro);
         codLivro++;
@@ -41,12 +53,12 @@ public class Main {
 
         List<Livro> listaLivros = new ArrayList<>();
 
-        Bancos.bancoLivros.add(l1);
-        Bancos.bancoLivros.add(l2);
-        Bancos.bancoLivros.add(l3);
-        Bancos.bancoLivros.add(l4);
-        Bancos.bancoLivros.add(l5);
-        Bancos.bancoLivros.add(l6);
+        BancoDados.bancoLivros.add(l1);
+        BancoDados.bancoLivros.add(l2);
+        BancoDados.bancoLivros.add(l3);
+        BancoDados.bancoLivros.add(l4);
+        BancoDados.bancoLivros.add(l5);
+        BancoDados.bancoLivros.add(l6);
 
         Acervo acervo = new Acervo();
 
@@ -58,18 +70,18 @@ public class Main {
 
         Emprestimo emp1 = new Emprestimo(codEmprestimo, l1, d1, p1);
         codEmprestimo++;
-        acervo.decrementarQtd(1);
+        emprestimoService.decrementarQtd(1L);
         Emprestimo emp2 = new Emprestimo(codEmprestimo, l1, d2, p1);
         codEmprestimo++;
-        acervo.decrementarQtd(1);
+        emprestimoService.decrementarQtd(1L);
 
-        Bancos.bancoEmprestimos.add(emp1);
-        Bancos.bancoEmprestimos.add(emp2);
+        BancoDados.bancoEmprestimos.add(emp1);
+        BancoDados.bancoEmprestimos.add(emp2);
 
 
         int opcao;
         do {
-            acervo.apagarReservasAntigas();
+            reservaService.apagarReservasAntigas();
             System.out.println("1 - Cadastrar Livro");
             System.out.println("2 - Deletar Livro");
             System.out.println("3 - Reservar Livro");
@@ -85,45 +97,43 @@ public class Main {
             switch (opcao) {
                 case 1:
                     System.out.println("1=Cadastro de Livro: ");
-                    acervo.addLivroAcervo(codLivro);
+                    livroService.salvar(livroService.lerDadosLivro(codLivro));
                     codLivro++;
                     break;
                 case 2:
                     System.out.println("2=Deletar Livro: ");
                     System.out.println("Insira o Código: ");
-                    acervo.removerLivro(sc.nextInt(), listaLivros);
+                    livroService.remover(sc.nextLong());
                     break;
                 case 3:
-                    acervo.cadastrarReserva();
+                    reservaService.cadastrarReserva();
                     break;
                 case 4:
                     System.out.println("Insira o Cod. do Livro ");
-                    int cdLivro = sc.nextInt();
+                    Long cdLivro = sc.nextLong();
                     sc.nextLine();
-                    acervo.cadastrarEmprestimo(cdLivro, codEmprestimo);
+                    emprestimoService.cadastrarEmprestimo(cdLivro, codEmprestimo);
                     codEmprestimo++;
                     break;
                 case 5:
                     System.out.println("Devolver Livro: ");
                     System.out.println("Insira o Cod. do Empréstimo: ");
-                    acervo.devolverEmprestimo(sc.nextInt());
+                    emprestimoService.devolverEmprestimo(sc.nextLong());
                     break;
                 case 6:
                     System.out.println("Listar Acervo de Livros: ");
-                    acervo.listarAcervo(Bancos.bancoLivros);
+                    livroService.listarAcervo(BancoDados.bancoLivros);
                     break;
                 case 7:
                     System.out.println("Listar Emprestimos: ");
-                    Acervo.imprimirListaEmprestimos();
+                    emprestimoService.imprimirListaEmprestimos();
                     break;
                 case 8:
                     System.out.println("Lista de Reservas: ");
-                    acervo.listarReservas(Bancos.bancoReservas);
+                    reservaService.listarReservas(BancoDados.bancoReservas);
                     break;
                 case 9:
-                    //cervo.encontrarPorCod2(1, Bancos.bancoLivros);
-                    //acervo.apagarReservasAntigas();
-                    acervo.testando();
+                    //System.out.println(acervo.disponibilidadadeStatutus("joao", 1));
                     break;
                 default:
                     System.out.println("Opção Inválida");

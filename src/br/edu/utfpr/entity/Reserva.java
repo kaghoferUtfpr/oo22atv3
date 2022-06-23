@@ -1,19 +1,29 @@
-package br.edu.utfpr;
+package br.edu.utfpr.entity;
 
 import java.time.LocalDate;
 
-public class Reserva {
+public class Reserva extends Entity{
 
+    private Long codigo;
     private Pessoa pessoa;
     private Livro livro;
     private LocalDate dataReserva;
     private LocalDate dataPrazoFinal;
+    private boolean statusDispReserva;
 
     public Reserva(Livro livro, LocalDate dataReserva, Pessoa pessoa) {
         this.livro = livro;
         this.dataReserva = dataReserva;
         this.dataPrazoFinal = dataReserva.plusDays(2);
         this.pessoa = pessoa;
+    }
+
+    public boolean isStatusDispReserva() {
+        return statusDispReserva;
+    }
+
+    public void setStatusDispReserva(boolean statusDispReserva) {
+        this.statusDispReserva = statusDispReserva;
     }
 
     public Pessoa getPessoa() {
@@ -46,5 +56,13 @@ public class Reserva {
 
     public void setDataReserva(LocalDate dataReserva) {
         this.dataReserva = dataReserva;
+    }
+
+    public Long getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
 }
